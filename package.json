@@ -26,9 +26,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@balena/jellyfish-assert": "^1.0.6",
-    "@balena/jellyfish-environment": "^2.2.13",
-    "@balena/jellyfish-logger": "^0.0.61",
-    "@balena/jellyfish-metrics": "^0.0.62",
+    "@balena/jellyfish-environment": "^2.2.14",
+    "@balena/jellyfish-logger": "^0.0.63",
+    "@balena/jellyfish-metrics": "^0.0.64",
     "@balena/jellyfish-uuid": "^0.0.31",
     "bluebird": "^3.7.2",
     "graphile-worker": "^0.6.0",
@@ -37,7 +37,7 @@
     "typed-errors": "^1.1.0"
   },
   "devDependencies": {
-    "@balena/jellycheck": "^0.0.5",
+    "@balena/jellycheck": "^0.0.6",
     "ava": "^3.12.1",
     "catch-uncommitted": "^1.6.2",
     "depcheck": "^1.2.0",
