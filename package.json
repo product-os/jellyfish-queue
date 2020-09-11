@@ -5,6 +5,9 @@
     "type": "git",
     "url": "https://github.com/product-os/jellyfish-queue.git"
   },
+  "engines": {
+    "node": ">=12.15.0"
+  },
   "description": "Queue library for Jellyfish",
   "main": "lib/index.js",
   "directories": {
