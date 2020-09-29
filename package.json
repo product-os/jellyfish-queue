@@ -34,7 +34,7 @@
     "@balena/jellyfish-metrics": "^0.0.115",
     "@balena/jellyfish-uuid": "^0.0.31",
     "bluebird": "^3.7.2",
-    "graphile-worker": "^0.8.0",
+    "graphile-worker": "^0.8.1",
     "is-uuid": "^1.0.2",
     "lodash": "^4.17.20",
     "typed-errors": "^1.1.0"
