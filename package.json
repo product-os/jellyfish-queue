@@ -31,7 +31,7 @@
     "@balena/jellyfish-assert": "^1.0.20",
     "@balena/jellyfish-environment": "^2.2.45",
     "@balena/jellyfish-logger": "^0.0.126",
-    "@balena/jellyfish-metrics": "^0.0.144",
+    "@balena/jellyfish-metrics": "^0.0.145",
     "@balena/jellyfish-uuid": "^0.0.31",
     "bluebird": "^3.7.2",
     "graphile-worker": "^0.8.1",
