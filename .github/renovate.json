@@ -29,6 +29,11 @@
         "patch"
       ],
       "automerge": true
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "packagePatterns": ["@balena/jellyfish-*"],
+      "enabled": false
     }
   ],
   "encrypted": {
