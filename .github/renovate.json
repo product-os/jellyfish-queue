@@ -35,6 +35,10 @@
     {
       "depTypeList": ["devDependencies"],
       "packagePatterns": ["@balena/jellyfish-*"],
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
       "enabled": false
     }
   ],
