@@ -41,7 +41,7 @@
     "typed-errors": "^1.1.0"
   },
   "devDependencies": {
-    "@balena/jellycheck": "^0.0.8",
+    "@balena/jellycheck": "^0.0.9",
     "@balena/jellyfish-action-library": "^5.2.8",
     "@balena/jellyfish-core": "^0.2.6",
     "ava": "^3.14.0",
