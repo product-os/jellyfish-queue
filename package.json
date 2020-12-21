@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@balena/jellycheck": "^0.0.9",
-    "@balena/jellyfish-action-library": "^5.2.8",
+    "@balena/jellyfish-action-library": "^6.0.4",
     "@balena/jellyfish-core": "^0.2.6",
     "ava": "^3.14.0",
     "catch-uncommitted": "^1.6.2",
