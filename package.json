@@ -1,6 +1,6 @@
 {
   "name": "@balena/jellyfish-queue",
-  "version": "0.0.282",
+  "version": "0.0.283",
   "repository": {
     "type": "git",
     "url": "https://github.com/product-os/jellyfish-queue.git"
