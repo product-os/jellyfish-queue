@@ -7,11 +7,20 @@
 const Bluebird = require('bluebird')
 const helpers = require('../backend-helpers')
 const uuid = require('@balena/jellyfish-uuid')
-const actionLibrary = require('@balena/jellyfish-action-library')
 const queue = require('../../../lib')
 const Consumer = queue.Consumer
 const Producer = queue.Producer
 const queueErrors = queue.errors
+
+const actionCreateCard = {
+	slug: 'action-create-card',
+	type: 'action@1.0.0',
+	version: '1.0.0',
+	name: 'Create a new card',
+	data: {
+		arguments: {}
+	}
+}
 
 exports.before = async (test, options) => {
 	await helpers.before(test, options && {
@@ -26,7 +35,7 @@ exports.before = async (test, options) => {
 		test.context.context, test.context.session, session.data.actor)
 
 	await test.context.jellyfish.insertCard(test.context.context, test.context.session,
-		actionLibrary['action-create-card'].card)
+		actionCreateCard)
 
 	test.context.queue = {}
 	test.context.queue.errors = queueErrors
