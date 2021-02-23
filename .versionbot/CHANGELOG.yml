@@ -1,4 +1,21 @@
 - commits:
+    - subject: Ensure graphile-worker is initialized in producer
+      hash: a80c2876aee7c9e5adf1dc0d92655cfaaf2e827c
+      body: >
+        Run the graphile worker once and then exit in the producer's initialize
+        method. This ensures that the graphile_worker schema is added to the DB
+        and the enqueue method will not throw an exception if the consumer
+        hasn't been started yet.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Graham McCulloch <graham@balena.io>
+        signed-off-by: Graham McCulloch <graham@balena.io>
+      author: Graham McCulloch
+      nested: []
+  version: 0.0.437
+  date: 2021-02-23T08:29:56.670Z
+- commits:
     - subject: 'patch: Update non-major'
       hash: c0ad12745be682dc4b5ba8696aa529e048a5e65d
       body: ''
