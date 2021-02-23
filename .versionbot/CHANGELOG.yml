@@ -1,4 +1,19 @@
 - commits:
+    - subject: Use graphileWorker.makeWorkerUtils in producer
+      hash: 59b216866bcbc5851628b5c731e6add0b3d897a2
+      body: >
+        This is a more correct way to initialize the graphile_worker schema in
+        the producer.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Graham McCulloch <graham@balena.io>
+        signed-off-by: Graham McCulloch <graham@balena.io>
+      author: Graham McCulloch
+      nested: []
+  version: 0.0.439
+  date: 2021-02-23T11:09:58.637Z
+- commits:
     - subject: 'patch: Update non-major'
       hash: d76d7f4606b410978dde39c36d5bc4e1ce10e525
       body: ''
