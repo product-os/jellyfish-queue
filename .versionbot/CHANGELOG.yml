@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update non-major'
+      hash: 2f985fe8ff4e7fee79774840eb94e1b0b413f61d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.440
+  date: 2021-02-23T12:53:58.351Z
+- commits:
     - subject: Use graphileWorker.makeWorkerUtils in producer
       hash: 59b216866bcbc5851628b5c731e6add0b3d897a2
       body: >
