@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update non-major'
+      hash: 58fc7bcdd3fc82a5162aeeabe8a0b52d746fd027
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.444
+  date: 2021-02-26T11:59:51.101Z
+- commits:
     - subject: 'patch: Update non-major Docker tags'
       hash: f857cbc8ff1ff80f17052f41a35f7af384792eca
       body: ''
