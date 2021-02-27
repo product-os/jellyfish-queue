@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency eslint to ^7.21.0'
+      hash: cbb7740d94666c5efaf56736e084c9b76feb9779
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.447
+  date: 2021-02-27T22:31:41.203Z
+- commits:
     - subject: 'patch: Update resinci/jellyfish-test Docker tag to v1.3.40'
       hash: 329553150a1410e671f4553569b2e9110d1a29f2
       body: ''
