@@ -1,4 +1,17 @@
 - commits:
+    - subject: Test jellyfish-environment/pull/175
+      hash: f3e0c60624b307790547b10bccc0ed3b10816792
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 0.0.473
+  date: 2021-03-16T09:59:21.613Z
+- commits:
     - subject: 'patch: Update non-major'
       hash: cf3a185381044aaa33cbf3b0b54f69faeb031d66
       body: ''
