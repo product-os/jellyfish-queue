@@ -1,4 +1,25 @@
 - commits:
+    - subject: Test jellyfish-core/pull/347
+      hash: f26189e2e5ea1a89f025edf9ce63c46838fb7490
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: 'patch: Update dependency @balena/jellyfish-environment to v3'
+      hash: 0cd987ae787f1b4179b645f58b4c5e530f7defd9
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.475
+  date: 2021-03-18T00:36:41.531Z
+- commits:
     - subject: 'patch: Update resinci/jellyfish-test Docker tag to v1.3.41'
       hash: 59bfe298f025ba8220f585cc8ffcadad393f7619
       body: ''
