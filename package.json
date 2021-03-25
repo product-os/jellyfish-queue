@@ -29,7 +29,7 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "UNLICENSED",
   "dependencies": {
-    "@balena/jellyfish-assert": "^1.1.0",
+    "@balena/jellyfish-assert": "^1.1.1",
     "@balena/jellyfish-environment": "^3.0.1",
     "@balena/jellyfish-logger": "^1.0.57",
     "@balena/jellyfish-metrics": "^0.1.125",
@@ -55,7 +55,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "husky": "^5.2.0",
-    "jsdoc-to-markdown": "^7.0.0",
+    "jsdoc-to-markdown": "^7.0.1",
     "lint-staged": "^10.5.4"
   },
   "lint-staged": {
