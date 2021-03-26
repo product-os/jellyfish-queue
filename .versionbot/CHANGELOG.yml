@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency eslint to ^7.23.0'
+      hash: c17cf0170f66b0d8f97d0f14e754cc8f52f8f26a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.486
+  date: 2021-03-26T23:33:00.079Z
+- commits:
     - subject: 'patch: Update non-major'
       hash: 3e914ab6942204edcabb5afdee62a28c5319f236
       body: ''
