@@ -1,3 +1,4 @@
+# Docker is only used for testing and the resulting images should not be published
 docker:
   publish: false
 npm:
@@ -6,4 +7,4 @@ npm:
       os: alpine
       architecture: x86_64
       node_versions:
-        - "14"
+        - '14'
