@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency husky to v6'
+      hash: 79406577c4569fdd8bd0d042803efd706c11fc76
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.488
+  date: 2021-03-31T00:35:26.693Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-assert to ^1.1.2'
       hash: 5f0d38717f19b66c129c81f91c7098b512276971
       body: ''
