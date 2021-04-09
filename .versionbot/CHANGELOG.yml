@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency eslint to ^7.24.0'
+      hash: ca0473566f6e551c61f055bb3e54e67aa159ca27
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.515
+  date: 2021-04-09T23:16:41.814Z
+- commits:
     - subject: 'patch: Update non-major Docker tags'
       hash: 3544302861adcb9c6f5796f707afd230303dbf12
       body: ''
