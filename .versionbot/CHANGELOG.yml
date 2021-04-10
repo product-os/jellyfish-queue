@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.49'
+      hash: f272c04fd241ce0dfb6b2a357acff47dcafe7c2d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.517
+  date: 2021-04-10T00:21:52.485Z
+- commits:
     - subject: 'patch: Update dependency eslint-plugin-promise to v5'
       hash: 4e375974d1b22b79cb3d850fb5dd709a099ea3e9
       body: ''
