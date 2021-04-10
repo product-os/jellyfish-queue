@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency eslint-plugin-promise to v5'
+      hash: 4e375974d1b22b79cb3d850fb5dd709a099ea3e9
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 0.0.516
+  date: 2021-04-10T00:09:21.286Z
+- commits:
     - subject: 'patch: Update dependency eslint to ^7.24.0'
       hash: ca0473566f6e551c61f055bb3e54e67aa159ca27
       body: ''
