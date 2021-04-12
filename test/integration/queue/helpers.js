@@ -6,7 +6,9 @@
 
 const Bluebird = require('bluebird')
 const helpers = require('../backend-helpers')
-const uuid = require('@balena/jellyfish-uuid')
+const {
+	v4: uuidv4
+} = require('uuid')
 const queue = require('../../../lib')
 const Consumer = queue.Consumer
 const Producer = queue.Producer
@@ -50,7 +52,7 @@ exports.before = async (test, options) => {
 		consumedActionRequests.push(actionRequest)
 	})
 
-	test.context.queueActor = await uuid.random()
+	test.context.queueActor = uuidv4()
 
 	test.context.dequeue = async (times = 50) => {
 		if (consumedActionRequests.length === 0) {
