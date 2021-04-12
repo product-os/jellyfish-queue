@@ -33,12 +33,12 @@
     "@balena/jellyfish-environment": "^4.1.1",
     "@balena/jellyfish-logger": "^2.1.24",
     "@balena/jellyfish-metrics": "^1.0.72",
-    "@balena/jellyfish-uuid": "^0.0.31",
     "bluebird": "^3.7.2",
     "graphile-worker": "^0.9.0",
     "is-uuid": "^1.0.2",
     "lodash": "^4.17.21",
-    "typed-errors": "^1.1.0"
+    "typed-errors": "^1.1.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@balena/jellycheck": "^0.1.1",
