@@ -32,7 +32,7 @@
     "@balena/jellyfish-assert": "^1.1.7",
     "@balena/jellyfish-environment": "^4.1.4",
     "@balena/jellyfish-logger": "^2.1.27",
-    "@balena/jellyfish-metrics": "^1.0.104",
+    "@balena/jellyfish-metrics": "^1.0.105",
     "bluebird": "^3.7.2",
     "graphile-worker": "^0.10.0",
     "is-uuid": "^1.0.2",
