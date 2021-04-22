@@ -1,4 +1,17 @@
 - commits:
+    - subject: Convert to TypeScript
+      hash: 9505c2df9213e1c0467958cedc76aef2f2774e38
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Graham McCulloch <graham@balena.io>
+        signed-off-by: Graham McCulloch <graham@balena.io>
+      author: Graham McCulloch
+      nested: []
+  version: 1.0.0
+  date: 2021-04-22T07:36:52.962Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.123'
       hash: f107b3c592b346a5871ff9fa2a9e97ff3f0ccb3d
       body: ''
