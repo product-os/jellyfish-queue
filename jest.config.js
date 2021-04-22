@@ -5,5 +5,6 @@
  */
 
 module.exports = {
-	execute: require('./execute')
-}
+	preset: "ts-jest",
+	testEnvironment: "node",
+};

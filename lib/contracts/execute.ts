@@ -4,14 +4,16 @@
  * Proprietary and confidential.
  */
 
-module.exports = {
+import type { ContractDefinition } from '@balena/jellyfish-types/build/core';
+import { TypeData } from '@balena/jellyfish-types/build/core';
+
+export const execute: ContractDefinition<TypeData> = {
 	slug: 'execute',
 	type: 'type@1.0.0',
 	version: '1.0.0',
 	name: 'The card execute event',
 	markers: [],
 	tags: [],
-	links: {},
 	active: true,
 	data: {
 		schema: {
@@ -22,50 +24,44 @@ module.exports = {
 					properties: {
 						timestamp: {
 							type: 'string',
-							format: 'date-time'
+							format: 'date-time',
 						},
 						originator: {
 							type: 'string',
-							format: 'uuid'
+							format: 'uuid',
 						},
 						target: {
 							type: 'string',
-							format: 'uuid'
+							format: 'uuid',
 						},
 						actor: {
 							type: 'string',
-							format: 'uuid'
+							format: 'uuid',
 						},
 						payload: {
 							type: 'object',
-							required: [
-								'action',
-								'card',
-								'timestamp',
-								'error',
-								'data'
-							],
+							required: ['action', 'card', 'timestamp', 'error', 'data'],
 							properties: {
 								action: {
 									type: 'string',
 									anyOf: [
 										{
-											format: 'uuid'
+											format: 'uuid',
 										},
 										{
-											pattern: '^[a-z0-9-]+(@\\d+)?(\\.\\d+)?(\\.\\d+)?$'
-										}
-									]
+											pattern: '^[a-z0-9-]+(@\\d+)?(\\.\\d+)?(\\.\\d+)?$',
+										},
+									],
 								},
 								card: {
-									type: 'string'
+									type: 'string',
 								},
 								timestamp: {
 									type: 'string',
-									format: 'date-time'
+									format: 'date-time',
 								},
 								error: {
-									type: 'boolean'
+									type: 'boolean',
 								},
 								data: {
 									type: [
@@ -74,25 +70,18 @@ module.exports = {
 										'number',
 										'boolean',
 										'array',
-										'null'
-									]
-								}
-							}
-						}
+										'null',
+									],
+								},
+							},
+						},
 					},
-					required: [
-						'timestamp',
-						'target',
-						'actor',
-						'payload'
-					]
-				}
+					required: ['timestamp', 'target', 'actor', 'payload'],
+				},
 			},
-			required: [
-				'data'
-			]
-		}
+			required: ['data'],
+		},
 	},
 	requires: [],
-	capabilities: []
-}
+	capabilities: [],
+};

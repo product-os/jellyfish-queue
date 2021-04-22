@@ -4,21 +4,24 @@
  * Proprietary and confidential.
  */
 
-const Bluebird = require('bluebird')
-const logger = require('@balena/jellyfish-logger').getLogger(__filename)
+import * as Bluebird from 'bluebird';
+import { getLogger } from '@balena/jellyfish-logger';
+import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
+import type {
+	ExecuteContract,
+	ExecuteContractDefinition,
+	PostResults,
+	PostOptions,
+} from '@balena/jellyfish-types/build/queue';
 
-/**
- * Queue module for Jellyfish.
- *
- * @module queue
- */
+const logger = getLogger(__filename);
 
 /**
  * @summary The execution event card type slug
  * @type {String}
  * @private
  */
-const EXECUTION_EVENT_TYPE = 'execute'
+const EXECUTION_EVENT_TYPE: string = 'execute';
 
 /**
  * @summary The execution event card version
@@ -28,7 +31,7 @@ const EXECUTION_EVENT_TYPE = 'execute'
  * Events in the system are meant to be immutable, so
  * they would always stay at a fixed version.
  */
-const EXECUTION_EVENT_VERSION = '1.0.0'
+const EXECUTION_EVENT_VERSION: string = '1.0.0';
 
 /**
  * @summary Get the slug of an execute event card
@@ -39,16 +42,16 @@ const EXECUTION_EVENT_VERSION = '1.0.0'
  * @param {String} options.id - request id
  * @returns {String} slug
  */
-exports.getExecuteEventSlug = (options) => {
-	return `${EXECUTION_EVENT_TYPE}-${options.id}`
-}
+export const getExecuteEventSlug = (options: { id: string }): string => {
+	return `${EXECUTION_EVENT_TYPE}-${options.id}`;
+};
 
 /**
  * @summary Create request execution event
  * @function
  * @public
  *
- * @param {Object} context - execution context
+ * @param {Context} context - execution context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {Object} options - options
@@ -79,8 +82,14 @@ exports.getExecuteEventSlug = (options) => {
  *
  * console.log(card.id)
  */
-exports.post = async (context, jellyfish, session, options, results) => {
-	const date = new Date()
+export const post = async (
+	context: Context,
+	jellyfish: JellyfishKernel,
+	session: string,
+	options: PostOptions,
+	results: PostResults,
+): Promise<ExecuteContract> => {
+	const date = new Date();
 	const data = {
 		timestamp: date.toISOString(),
 		target: options.id,
@@ -90,38 +99,37 @@ exports.post = async (context, jellyfish, session, options, results) => {
 			card: options.card,
 			timestamp: options.timestamp,
 			error: results.error,
-			data: results.data
-		}
-	}
+			data: results.data,
+		},
+	};
 
-	const contents = {
+	const contents: ExecuteContractDefinition = {
 		type: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`,
-		slug: exports.getExecuteEventSlug({
-			id: options.id
+		slug: getExecuteEventSlug({
+			id: options.id,
 		}),
 		version: EXECUTION_EVENT_VERSION,
 		active: true,
-		links: {},
 		markers: [],
 		tags: [],
 		requires: [],
 		capabilities: [],
-		data
-	}
+		data,
+	};
 
 	if (options.originator) {
-		contents.data.originator = options.originator
+		contents.data.originator = options.originator;
 	}
 
-	return jellyfish.insertCard(context, session, contents)
-}
+	return jellyfish.insertCard(context, session, contents);
+};
 
 /**
  * @summary Get the last execution event given an originator
  * @function
  * @public
  *
- * @param {Object} context - execution context
+ * @param {Context} context - execution context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {String} originator - originator card id
@@ -135,38 +143,55 @@ exports.post = async (context, jellyfish, session, options, results) => {
  *   console.log(executeEvent.data.timestamp)
  * }
  */
-exports.getLastExecutionEvent = async (context, jellyfish, session, originator) => {
-	const events = await jellyfish.query(context, session, {
-		type: 'object',
-		required: [ 'active', 'type', 'data' ],
-		additionalProperties: true,
-		properties: {
-			active: {
-				type: 'boolean',
-				const: true
+export const getLastExecutionEvent = async (
+	context: Context,
+	jellyfish: JellyfishKernel,
+	session: string,
+	originator: string,
+): Promise<any> => {
+	const events = await jellyfish.query(
+		context,
+		session,
+		{
+			type: 'object',
+			required: ['active', 'type', 'data'],
+			additionalProperties: true,
+			properties: {
+				active: {
+					type: 'boolean',
+					const: true,
+				},
+				type: {
+					type: 'string',
+					const: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`,
+				},
+				data: {
+					type: 'object',
+					required: ['originator'],
+					additionalProperties: true,
+					properties: {
+						originator: {
+							type: 'string',
+							const: originator,
+						},
+					},
+				},
 			},
-			type: {
-				type: 'string',
-				const: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`
-			},
-			data: {
-				type: 'object',
-				required: [ 'originator' ],
-				additionalProperties: true,
-				properties: {
-					originator: {
-						type: 'string',
-						const: originator
-					}
-				}
-			}
-		}
-	}, {
-		sortBy: 'created_at',
-		limit: 1
-	})
+		},
+		{
+			sortBy: 'created_at',
+			limit: 1,
+		},
+	);
 
-	return events[0] || null
+	return events[0] || null;
+};
+
+export interface WaitOptions {
+	id: string;
+	actor: string;
+	action?: string;
+	card?: string;
 }
 
 /**
@@ -174,7 +199,7 @@ exports.getLastExecutionEvent = async (context, jellyfish, session, originator) 
  * @function
  * @public
  *
- * @param {Object} context - execution context
+ * @param {Context} context - execution context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {Object} options - options
@@ -191,94 +216,101 @@ exports.getLastExecutionEvent = async (context, jellyfish, session, originator) 
  *
  * console.log(card.id)
  */
-exports.wait = async (context, jellyfish, session, options) => {
-	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`
+export const wait = async (
+	context: Context,
+	jellyfish: JellyfishKernel,
+	session: string,
+	options: WaitOptions,
+): Promise<ExecuteContract> => {
+	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`;
 	const schema = {
 		type: 'object',
 		additionalProperties: true,
-		required: [ 'slug', 'active', 'type', 'data' ],
+		required: ['slug', 'active', 'type', 'data'],
 		properties: {
 			slug: {
 				type: 'string',
-				const: slug
+				const: slug,
 			},
 			active: {
 				type: 'boolean',
-				const: true
+				const: true,
 			},
 			type: {
 				type: 'string',
-				const: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`
+				const: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`,
 			},
 			data: {
 				type: 'object',
 				additionalProperties: true,
-				required: [ 'payload' ],
+				required: ['payload'],
 				properties: {
 					payload: {
 						type: 'object',
-						additionalProperties: true
-					}
-				}
-			}
-		}
-	}
+						additionalProperties: true,
+					},
+				},
+			},
+		},
+	};
 
-	let result = null
+	let result: ExecuteContract | null = null;
 
-	const stream = await jellyfish.stream(context, session, schema)
+	const stream = await jellyfish.stream(context, session, schema);
 	logger.info(context, 'Wait stream opened', {
-		slug
-	})
+		slug,
+	});
 
 	stream.once('data', (change) => {
-		result = change.after
+		result = change.after;
 
 		logger.info(context, 'Found results using stream', {
-			slug: result.slug,
-			data: Object.keys(change.after.data)
-		})
+			slug: result?.slug,
+			data: Object.keys(result?.data || {}),
+		});
 
-		stream.close()
-	})
+		stream.close();
+	});
 
 	return new Bluebird((resolve, reject) => {
 		stream.once('error', (error) => {
-			stream.removeAllListeners()
-			logger.exception(context, 'Wait stream error', error)
-			reject(error)
-		})
+			stream.removeAllListeners();
+			logger.exception(context, 'Wait stream error', error);
+			reject(error);
+		});
 
 		stream.once('closed', () => {
-			stream.removeAllListeners()
+			stream.removeAllListeners();
 			logger.info(context, 'Closing wait stream', {
-				slug
-			})
+				slug,
+			});
 
-			resolve(result)
-		})
+			resolve(result || undefined);
+		});
 
 		// Don't perform a "get by slug" if we already have a match.
 		if (result) {
-			return
+			return;
 		}
 
-		jellyfish.getCardBySlug(
-			context, session, `${slug}@${EXECUTION_EVENT_VERSION}`).then((card) => {
-			if (!card) {
-				return
-			}
+		jellyfish
+			.getCardBySlug(context, session, `${slug}@${EXECUTION_EVENT_VERSION}`)
+			.then((card) => {
+				if (!card) {
+					return;
+				}
 
-			logger.info(context, 'Found results on first slug query', {
-				slug: card.slug,
-				data: Object.keys(card.data)
+				logger.info(context, 'Found results on first slug query', {
+					slug: card.slug,
+					data: Object.keys(card.data),
+				});
+
+				result = result || (card as ExecuteContract);
+				stream.close();
 			})
-
-			result = result || card
-			stream.close()
-		}).catch((error) => {
-			stream.removeAllListeners()
-			reject(error)
-		})
-	})
-}
+			.catch((error) => {
+				stream.removeAllListeners();
+				reject(error);
+			});
+	});
+};
