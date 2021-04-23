@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update graphile-worker to v0.11.0
+      hash: f21fbdcaddc1bba311fbf24dc57f55623aa9946b
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.1
+  date: 2021-04-23T01:55:07.485Z
+- commits:
     - subject: Convert to TypeScript
       hash: 9505c2df9213e1c0467958cedc76aef2f2774e38
       body: ''
