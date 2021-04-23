@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import * as events from './events';
 import * as Bluebird from 'bluebird';
 import * as graphileWorker from 'graphile-worker';
+import { Logger } from '@graphile/logger';
 import { getLogger } from '@balena/jellyfish-logger';
 import { contracts } from './contracts';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
@@ -99,7 +100,7 @@ export class Consumer implements QueueConsumer {
 				pgPool: this.jellyfish.backend.connection.$pool,
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
-				logger: new graphileWorker.Logger((_scope) => {
+				logger: new Logger((_scope) => {
 					return _.noop;
 				}),
 				taskList: {
