@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update non-major'
+      hash: 06c382883aa1e79587ac2af9afb5ec824e9a5505
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.12
+  date: 2021-04-24T14:38:43.145Z
+- commits:
     - subject: Remove jellyfish-uuid from repo.yml
       hash: 2bf87fbbecbd33b75cb7a9e626feb5fca6c9b80a
       body: ''
