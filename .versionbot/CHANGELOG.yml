@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency graphile-worker to ^0.11.1'
+      hash: e2557c8c59ad948dee761c4f8d3b4ffe3a262866
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.59
+  date: 2021-05-06T23:52:29.249Z
+- commits:
     - subject: 'patch: Update non-major'
       hash: 697a6f3c3ccafeba7a9e7c1c3e48ec97efd9ed8d
       body: ''
