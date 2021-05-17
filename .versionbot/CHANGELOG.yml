@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-logger to ^2.1.60'
+      hash: bec9b31632bcb5c8ae3178a8ceb6959baf75bcd0
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.80
+  date: 2021-05-17T09:42:12.833Z
+- commits:
     - subject: 'patch: Update balena/open-balena-base Docker tag to v11.2.0'
       hash: 85b08a3ac62bfdef7850a178b43b74aa47462306
       body: ''
