@@ -18,7 +18,7 @@ import {
 	JellyfishKernel,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import { v4 as isUUID } from 'is-uuid';
 import { v4 as uuidv4 } from 'uuid';
 import * as graphileWorker from 'graphile-worker';

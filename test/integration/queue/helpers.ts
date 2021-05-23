@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import { v4 as uuidv4 } from 'uuid';
 import * as helpers from '../backend-helpers';
 import * as queue from '../../../lib';

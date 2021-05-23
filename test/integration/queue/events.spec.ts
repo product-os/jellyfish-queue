@@ -5,7 +5,7 @@
  */
 
 import { omit } from 'lodash';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import * as helpers from './helpers';
 import { events } from '../../../lib';
 

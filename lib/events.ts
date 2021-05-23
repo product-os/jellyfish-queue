@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import { getLogger } from '@balena/jellyfish-logger';
 import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
 import type {
