@@ -6,7 +6,7 @@
 
 import * as _ from 'lodash';
 import * as events from './events';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import * as graphileWorker from 'graphile-worker';
 import { Logger } from '@graphile/logger';
 import { getLogger } from '@balena/jellyfish-logger';

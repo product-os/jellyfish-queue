@@ -1,6 +1,6 @@
 {
   "extends": [
-    "github>product-os/jellyfish-renovate-config"
+    "github>product-os/jellyfish-config//config/renovate"
   ],
   "packageRules": [
     {
