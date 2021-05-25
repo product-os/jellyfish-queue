@@ -1,4 +1,27 @@
 - commits:
+    - subject: 'build(deps): bump browserslist from 4.16.4 to 4.16.6'
+      hash: 3f0974e0c425311dd74e0d8d418388152daaf7e0
+      body: >
+        Bumps [browserslist](https://github.com/browserslist/browserslist) from
+        4.16.4 to 4.16.6.
+
+        - [Release notes](https://github.com/browserslist/browserslist/releases)
+
+        -
+        [Changelog](https://github.com/browserslist/browserslist/blob/main/CHANGELOG.md)
+
+        -
+        [Commits](https://github.com/browserslist/browserslist/compare/4.16.4...4.16.6)
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 'dependabot[bot] <support@github.com>'
+        signed-off-by: 'dependabot[bot] <support@github.com>'
+      author: 'dependabot[bot]'
+      nested: []
+  version: 1.0.101
+  date: 2021-05-25T03:27:41.894Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.227'
       hash: 551df91e9d9fe89d1c6c10c14a1f207031c12fde
       body: ''
