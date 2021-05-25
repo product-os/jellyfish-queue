@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update internal-patch'
+      hash: e0fce425b977cfa4ea636003679119798aa43020
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.102
+  date: 2021-05-25T03:44:48.705Z
+- commits:
     - subject: 'build(deps): bump browserslist from 4.16.4 to 4.16.6'
       hash: 3f0974e0c425311dd74e0d8d418388152daaf7e0
       body: >
