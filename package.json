@@ -60,7 +60,7 @@
   "devDependencies": {
     "@balena/jellycheck": "^0.1.1",
     "@balena/jellyfish-config": "^1.0.6",
-    "@balena/jellyfish-core": "^2.13.0",
+    "@balena/jellyfish-core": "^3.0.0",
     "@balena/jellyfish-types": "^0.5.35",
     "@balena/lint": "^6.1.1",
     "@types/bluebird": "^3.5.35",
