@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/ci-task-runner to ^0.2.160'
+      hash: 9b6307ce43dfa84d29a7b9083217feb26cb4270e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.135
+  date: 2021-06-06T12:08:18.895Z
+- commits:
     - subject: Update balenaCI docker test files
       hash: 4be76257095eb92c89e3eb14e62689cba083de23
       body: ''
