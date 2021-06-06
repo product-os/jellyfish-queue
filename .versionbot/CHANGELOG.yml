@@ -1,4 +1,17 @@
 - commits:
+    - subject: Remove unnecessary jest-cli
+      hash: 75cc7055a73e767b824797d5777b2f619efde2fd
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.133
+  date: 2021-06-06T01:24:42.290Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.256'
       hash: 1f28875aaea521c2ba9555df24dfbf361eec02ca
       body: ''
