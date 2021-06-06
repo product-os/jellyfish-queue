@@ -1,4 +1,27 @@
 - commits:
+    - subject: Update balenaCI docker test files
+      hash: 4be76257095eb92c89e3eb14e62689cba083de23
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Bump internal dev dependencies
+      hash: fe3350babe7835f55e3d8c96675f17d10f3d6300
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.134
+  date: 2021-06-06T05:06:28.061Z
+- commits:
     - subject: Remove unnecessary jest-cli
       hash: 75cc7055a73e767b824797d5777b2f619efde2fd
       body: ''
