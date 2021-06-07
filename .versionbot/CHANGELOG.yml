@@ -1,4 +1,35 @@
 - commits:
+    - subject: Increase jest timeout to 10s
+      hash: 56af86b7af54476935f5779f07be05732f263d08
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Update tests to work with jest v27
+      hash: 107307191f44397015a39c982110fad50b34815c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: 'patch: Update external-major'
+      hash: 9d22320238cd0fa76c6b87aa79bc09659b6f7a7c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.140
+  date: 2021-06-07T04:48:50.674Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.260'
       hash: 2cf5040f2d61a9c1b5cc8f88938df2ed3559190a
       body: ''
