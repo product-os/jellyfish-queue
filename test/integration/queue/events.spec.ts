@@ -260,7 +260,7 @@ describe('events', () => {
 			);
 		});
 
-		test('should be able to access the event payload of a huge event', async (done) => {
+		test('should be able to access the event payload of a huge event', (done) => {
 			expect.assertions(2);
 			const BIG_EXECUTE_CARD = require('./big-execute.json');
 
@@ -271,22 +271,16 @@ describe('events', () => {
 					card: BIG_EXECUTE_CARD.data.target,
 					actor: BIG_EXECUTE_CARD.data.actor,
 				})
-				.then(async (card) => {
+				.then((card) => {
 					expect(card.data.payload).toEqual(BIG_EXECUTE_CARD.data.payload);
-
-					// Wait a bit for `postgres.upsertObject` to terminate
-					// Otherwise, we close the underlying connections while the rest
-					// of the code of upsertObject is still running, causing errors
-					// unrelated to the test
-					await Bluebird.delay(500);
 					done();
 				})
 				.catch(done);
 
-			Bluebird.delay(500)
+			Bluebird.delay(100)
 				.then(() => {
 					// Use the backend class directly so we can inject "links"
-					return context.backend
+					context.backend
 						.insertElement(context.context, BIG_EXECUTE_CARD)
 						.then((execute) => {
 							expect(omit(execute, ['id'])).toEqual(
@@ -341,7 +335,7 @@ describe('events', () => {
 			});
 		});
 
-		test('should ignore cards that do not match the id', async (done) => {
+		test('should ignore cards that do not match the id', (done) => {
 			expect.assertions(1);
 
 			const id1 = context.generateRandomID();
@@ -352,22 +346,16 @@ describe('events', () => {
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
 				})
-				.then(async (request) => {
+				.then((request) => {
 					expect(request.data.payload.timestamp).toBe(
 						'2020-06-30T19:34:42.829Z',
 					);
-
-					// Wait a bit for `postgres.upsertObject` to terminate
-					// Otherwise, we close the underlying connections while the rest
-					// of the code of upsertObject is still running, causing errors
-					// unrelated to the test
-					await Bluebird.delay(500);
 					done();
 				})
 				.catch(done);
 
 			const id2 = context.generateRandomID();
-			Bluebird.delay(500)
+			Bluebird.delay(100)
 				.then(async () => {
 					await events.post(
 						context.context,
