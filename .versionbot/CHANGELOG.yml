@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-environment to ^4.2.0'
+      hash: 013ec209adb8e4680c95635cbd8db336c5242e46
+      body: |
+        Update @balena/jellyfish-environment from 4.1.35 to 4.2.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.141
+  date: 2021-06-08T02:00:42.012Z
+- commits:
     - subject: Increase jest timeout to 10s
       hash: 56af86b7af54476935f5779f07be05732f263d08
       body: ''
