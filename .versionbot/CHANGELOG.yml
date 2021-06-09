@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.264'
+      hash: 9860cc0961b2d97c8f6ac8f3e2181fa7ef964c36
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.146
+  date: 2021-06-09T03:49:58.940Z
+- commits:
     - subject: 'build(deps): bump glob-parent from 5.1.1 to 5.1.2'
       hash: 0a9fd8d8428bbc564695d18b5d0476ae5079aff3
       body: >
