@@ -1,4 +1,17 @@
 - commits:
+    - subject: Simplify development setup
+      hash: a5c3c70cc70ff33920b84e978ff60bbe01d28f1a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.147
+  date: 2021-06-10T00:16:31.414Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.264'
       hash: 9860cc0961b2d97c8f6ac8f3e2181fa7ef964c36
       body: ''
