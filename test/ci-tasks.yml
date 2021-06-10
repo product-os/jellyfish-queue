@@ -4,6 +4,6 @@ attemptsDefault: 1
 tasks:
   - name: 'integration-tests'
     description: 'Integration Tests'
-    command: 'make test-integration'
+    command: 'npm run integration'
     cwd: '/usr/src/jellyfish'
     required: true

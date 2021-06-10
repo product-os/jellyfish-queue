@@ -20,7 +20,7 @@ this module.
 Below is an example how to use this library:
 
 ```js
-const Consumer = require('@balena/jellyfish-queue').Consumer;
+import { Consumer } from '@balena/jellyfish-queue';
 
 const myConsumer = new Consumer(jellyfish, jellyfish.sessions.admin);
 ```
@@ -33,14 +33,10 @@ Visit the website for complete documentation: https://product-os.github.io/jelly
 
 # Testing
 
-Running integration tests requires a running postgres database and redis server. The easiest way to do this is to use docker-compose.
+Unit tests can be easily run with the command `npm test`.
+
+The integration tests require a postgres DB and redis server. The simplest way to run the tests locally is with docker-compose.
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build
-```
-
-You can then run the integration tests from your host with:
-
-```
-POSTGRES_USER=docker POSTGRES_PASSWORD=docker npm run test-integration
+docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build --exit-code-from=sut
 ```
