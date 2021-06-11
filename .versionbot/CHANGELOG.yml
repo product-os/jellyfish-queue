@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update internal-patch'
+      hash: 55a4bc141a00ace36c8794fd4588c4c5125e8c2d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.148
+  date: 2021-06-11T06:46:26.031Z
+- commits:
     - subject: Simplify development setup
       hash: a5c3c70cc70ff33920b84e978ff60bbe01d28f1a
       body: ''
