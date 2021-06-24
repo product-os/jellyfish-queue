@@ -1,4 +1,18 @@
 - commits:
+    - subject: Bump jellyfish-core dev dependency
+      hash: db8cef1476757572c914e55ac74b98e8cb7963a3
+      body: |
+        Also add it as a peer dependency
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Graham McCulloch <graham@balena.io>
+        signed-off-by: Graham McCulloch <graham@balena.io>
+      author: Graham McCulloch
+      nested: []
+  version: 1.0.178
+  date: 2021-06-24T04:00:13.234Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: 84562cfa7de23f46beec6a08fb499e8a49a798da
       body: ''
