@@ -1,13 +1,5 @@
-.tmp
-.cache-loader
-.nyc_ouput
-.versionbot
-coverage
-dist
-dump.rdb
+# This file is auto-synced from product-os/jellyfish-config/sync/.dockerignore
+# and should only be edited there!
 node_modules
-postgres_data
-**/node_modules
-**/package*.json.*
-.libs/*/package*.json
-.libs/*/*.tgz*
+.versionbot
+.github
