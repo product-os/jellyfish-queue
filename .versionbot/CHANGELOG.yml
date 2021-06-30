@@ -1,4 +1,37 @@
 - commits:
+    - subject: Set schema type explicitly
+      hash: ea91634f2ed0312233a7fd2315edf87ec0c41b9d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Bump node engines specification
+      hash: 871e170ebc547f8bfa7d62a0976e6c1f02dbe93f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Remove package-lock.json
+      hash: 7815407aa3596bf43fae7f25160b40f5cbd07ade
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.192
+  date: 2021-06-30T02:09:33.740Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: 422f85085d05b44a6f04480ef22993a374e6cfaa
       body: ''
