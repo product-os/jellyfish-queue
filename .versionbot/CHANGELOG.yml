@@ -1,4 +1,25 @@
 - commits:
+    - subject: Remove package-lock file
+      hash: 4b18ceca7e78236d6c2079c1cd37b261acd5f98e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Graham McCulloch <graham@balena.io>
+        signed-off-by: Graham McCulloch <graham@balena.io>
+      author: Graham McCulloch
+      nested: []
+    - subject: "\U0001F504 Synced file(s) with product-os/jellyfish-config"
+      hash: 61ad57a9b08ceea17877c813e254488351f0d16c
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: jellyfish-bot
+      nested: []
+  version: 1.0.193
+  date: 2021-06-30T03:11:44.122Z
+- commits:
     - subject: Set schema type explicitly
       hash: ea91634f2ed0312233a7fd2315edf87ec0c41b9d
       body: ''
