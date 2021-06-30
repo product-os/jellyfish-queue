@@ -7,6 +7,7 @@
 import Bluebird from 'bluebird';
 import { getLogger } from '@balena/jellyfish-logger';
 import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
+import type { JSONSchema } from '@balena/jellyfish-types';
 import type {
 	ExecuteContract,
 	ExecuteContractDefinition,
@@ -223,7 +224,7 @@ export const wait = async (
 	options: WaitOptions,
 ): Promise<ExecuteContract> => {
 	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`;
-	const schema = {
+	const schema: JSONSchema = {
 		type: 'object',
 		additionalProperties: true,
 		required: ['slug', 'active', 'type', 'data'],
