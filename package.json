@@ -45,9 +45,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@balena/jellyfish-assert": "^1.1.62",
-    "@balena/jellyfish-environment": "^4.3.13",
+    "@balena/jellyfish-environment": "^4.3.14",
     "@balena/jellyfish-logger": "^3.0.47",
-    "@balena/jellyfish-metrics": "^1.0.314",
+    "@balena/jellyfish-metrics": "^1.0.316",
     "@graphile/logger": "^0.2.0",
     "bluebird": "^3.7.2",
     "graphile-worker": "^0.11.3",
