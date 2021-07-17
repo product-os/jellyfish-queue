@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update external-non-major'
+      hash: 1576f55fed46d7014f13613976a16aca30e175b5
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.224
+  date: 2021-07-17T01:36:22.215Z
+- commits:
     - subject: Remove whitesource config
       hash: d90473f6556f8d7757c3192ee09affa096426d6d
       body: ''
