@@ -40,7 +40,8 @@
     "test:integration": "jest ./test/integration/**/*.spec.ts -- --verbose",
     "test:compose": "docker-compose -f docker-compose.test.yml -f docker-compose.yml up --build --exit-code-from=sut",
     "doc": "typedoc lib/ && touch docs/.nojekyll",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "compose": "docker-compose up"
   },
   "author": "Balena.io. <hello@balena.io>",
   "license": "UNLICENSED",
