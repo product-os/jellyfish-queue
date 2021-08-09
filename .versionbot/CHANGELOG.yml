@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update queue consumer types to correctly emit an action request contract
+      hash: cb19d52f4b37066a0348608307787ecc6ad33496
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+      nested: []
+  version: 1.0.241
+  date: 2021-08-09T10:11:21.690Z
+- commits:
     - subject: 'Add compose up command, more test docs'
       hash: e07a92dbec47f3b857528f4d9053939646104138
       body: ''
