@@ -48,7 +48,7 @@
   "dependencies": {
     "@balena/jellyfish-assert": "^1.1.67",
     "@balena/jellyfish-environment": "^4.3.19",
-    "@balena/jellyfish-logger": "^3.0.54",
+    "@balena/jellyfish-logger": "^3.0.57",
     "@balena/jellyfish-metrics": "^1.0.333",
     "@graphile/logger": "^0.2.0",
     "bluebird": "^3.7.2",
