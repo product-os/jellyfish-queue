@@ -20,11 +20,11 @@ import {
 	LinkContract,
 	LinkData,
 } from '@balena/jellyfish-types/build/core';
+import { core } from '@balena/jellyfish-types';
 import {
 	PostResults,
 	OnMessageEventHandler,
 	QueueConsumer,
-	ActionPayload,
 	ExecuteContract,
 } from '@balena/jellyfish-types/build/queue';
 
@@ -104,8 +104,9 @@ export class Consumer implements QueueConsumer {
 					return _.noop;
 				}),
 				taskList: {
-					actionRequest: async (requestPayload) => {
-						const payload = requestPayload as ActionPayload;
+					actionRequest: async (result) => {
+						// TS-TODO: Update graphile types to support Task list type parmaeterisation so we don't need to cast
+						const payload = result as core.ActionRequestContract;
 						const action = payload.data.action.split('@')[0];
 						try {
 							this.messagesBeingHandled++;

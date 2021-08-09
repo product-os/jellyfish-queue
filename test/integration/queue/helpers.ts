@@ -13,10 +13,10 @@ import {
 	UserContract,
 } from '@balena/jellyfish-types/build/core';
 import {
-	ActionPayload,
 	QueueConsumer,
 	QueueProducer,
 } from '@balena/jellyfish-types/build/queue';
+import { core } from '@balena/jellyfish-types';
 
 const Consumer = queue.Consumer;
 const Producer = queue.Producer;
@@ -25,7 +25,7 @@ export interface IntegrationCoreTestContext {
 	session: string;
 	actor: UserContract;
 	queueActor: string;
-	dequeue: (times?: number) => Promise<ActionPayload | null>;
+	dequeue: (times?: number) => Promise<core.ActionRequestContract | null>;
 	queue: {
 		consumer: QueueConsumer;
 		producer: QueueProducer;
@@ -81,18 +81,20 @@ export const before = async (
 		producer: new Producer(context.kernel, context.session),
 	};
 
-	const consumedActionRequests: ActionPayload[] = [];
+	const consumedActionRequests: core.ActionRequestContract[] = [];
 
 	await context.queue.consumer.initializeWithEventHandler(
 		context.context,
-		async (payload: ActionPayload) => {
+		async (payload: core.ActionRequestContract) => {
 			consumedActionRequests.push(payload);
 		},
 	);
 
 	context.queueActor = uuidv4();
 
-	const dequeue = async (times: number = 50): Promise<ActionPayload | null> => {
+	const dequeue = async (
+		times: number = 50,
+	): Promise<core.ActionRequestContract | null> => {
 		if (consumedActionRequests.length === 0) {
 			if (times <= 0) {
 				return null;
@@ -102,7 +104,7 @@ export const before = async (
 			return dequeue(times - 1);
 		}
 
-		return consumedActionRequests.shift() as ActionPayload;
+		return consumedActionRequests.shift() as core.ActionRequestContract;
 	};
 
 	context.dequeue = dequeue;
