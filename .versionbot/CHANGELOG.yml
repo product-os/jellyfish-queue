@@ -1,4 +1,17 @@
 - commits:
+    - subject: Only disable internal patch bumps
+      hash: eecb7c91d041913e5503ecd7b6dc2da6f00c0312
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.244
+  date: 2021-08-11T00:33:22.089Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-logger to ^3.0.58'
       hash: dd6a1e081f2d4171d5fab6f59f682f14f6ac16ca
       body: ''
