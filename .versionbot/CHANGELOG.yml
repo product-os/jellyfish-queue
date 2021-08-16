@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update resinci/jellyfish-test Docker tag to v1.4.9'
+      hash: 60a1bfc461eb25d5170ca273f74ffd1f5cfded09
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.250
+  date: 2021-08-16T01:21:21.789Z
+- commits:
     - subject: 'patch: Update dependency @types/jest to v27'
       hash: 93c65b02c84985405facbfe51e91ef4eef9f48a7
       body: ''
