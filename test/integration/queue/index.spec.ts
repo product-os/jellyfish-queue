@@ -10,7 +10,9 @@ import {
 	Contract,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import type { ProducerOptions } from '@balena/jellyfish-types/build/queue';
+import { queue } from '@balena/jellyfish-types';
+import { strict } from 'assert';
+import { parseExpression } from 'cron-parser';
 import { errors } from '../../../lib';
 import * as helpers from './helpers';
 
@@ -288,6 +290,231 @@ describe('queue', () => {
 				});
 			}).rejects.toThrowError(context.kernel.errors.JellyfishInvalidSession);
 		});
+
+		test('should not enqueue for non-existent scheduled action', async () => {
+			const typeCard = await context.kernel.getCardBySlug(
+				context.context,
+				context.session,
+				'card@latest',
+			);
+			const scheduledActionId = context.generateRandomID();
+			await context.queue.producer.enqueue(
+				context.queueActor,
+				context.session,
+				{
+					action: 'action-create-card@1.0.0',
+					context: context.context,
+					card: typeCard!.id,
+					type: typeCard!.type,
+					arguments: {
+						properties: {
+							version: '1.0.0',
+							slug: 'foo',
+							data: {
+								foo: 'bar',
+							},
+						},
+					},
+					schedule: scheduledActionId,
+				},
+			);
+
+			const request = await context.dequeue();
+			expect(request).toBe(null);
+
+			const jobs = await context.backend.connection.any({
+				text: `SELECT run_at from graphile_worker.jobs where key=$1;`,
+				values: [scheduledActionId],
+			});
+			expect(jobs.length).toEqual(0);
+		});
+
+		test('should not enqueue for deleted scheduled action', async () => {
+			const typeCard = await context.kernel.getCardBySlug(
+				context.context,
+				context.session,
+				'card@latest',
+			);
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					active: false,
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date: new Date().toISOString(),
+							},
+						},
+					},
+				},
+			);
+			await context.queue.producer.enqueue(
+				context.queueActor,
+				context.session,
+				{
+					action: 'action-create-card@1.0.0',
+					context: context.context,
+					card: typeCard!.id,
+					type: typeCard!.type,
+					arguments: {
+						properties: {
+							version: '1.0.0',
+							slug: 'foo',
+							data: {
+								foo: 'bar',
+							},
+						},
+					},
+					schedule: scheduledAction.id,
+				},
+			);
+
+			const request = await context.dequeue();
+			expect(request).toBe(null);
+
+			const jobs = await context.backend.connection.any({
+				text: `SELECT run_at from graphile_worker.jobs where key=$1;`,
+				values: [scheduledAction.id],
+			});
+			expect(jobs.length).toEqual(0);
+		});
+
+		test('should not enqueue if scheduled action execution date is in the past', async () => {
+			const typeCard = await context.kernel.getCardBySlug(
+				context.context,
+				context.session,
+				'card@latest',
+			);
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date: new Date(
+									new Date().setDate(new Date().getDate() - 1),
+								).toISOString(),
+							},
+						},
+					},
+				},
+			);
+			const request = await context.queue.producer.enqueue(
+				context.queueActor,
+				context.session,
+				{
+					action: 'action-create-card@1.0.0',
+					context: context.context,
+					card: typeCard!.id,
+					type: typeCard!.type,
+					arguments: {
+						properties: {
+							version: '1.0.0',
+							slug: 'foo',
+							data: {
+								foo: 'bar',
+							},
+						},
+					},
+					schedule: scheduledAction.id,
+				},
+			);
+			expect(request.data.schedule).toEqual(scheduledAction.id);
+
+			const jobs = await context.backend.connection.any({
+				text: `SELECT run_at from graphile_worker.jobs where key=$1;`,
+				values: [scheduledAction.id],
+			});
+			expect(jobs.length).toEqual(0);
+		});
+
+		test('should enqueue if scheduled action execution date is in the future', async () => {
+			const typeCard = await context.kernel.getCardBySlug(
+				context.context,
+				context.session,
+				'card@latest',
+			);
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date: new Date(
+									new Date().setDate(new Date().getDate() + 1),
+								).toISOString(),
+							},
+						},
+					},
+				},
+			);
+			const request = await context.queue.producer.enqueue(
+				context.queueActor,
+				context.session,
+				{
+					action: 'action-create-card@1.0.0',
+					context: context.context,
+					card: typeCard!.id,
+					type: typeCard!.type,
+					arguments: {
+						properties: {
+							version: '1.0.0',
+							slug: 'foo',
+							data: {
+								foo: 'bar',
+							},
+						},
+					},
+					schedule: scheduledAction.id,
+				},
+			);
+			expect(request.data.schedule).toEqual(scheduledAction.id);
+
+			const jobs = await context.backend.connection.any({
+				text: `SELECT run_at from graphile_worker.jobs where key=$1;`,
+				values: [scheduledAction.id],
+			});
+			expect(jobs.length).toEqual(1);
+			expect(jobs[0]['run_at']).toEqual(
+				scheduledAction.data.schedule.once.date,
+			);
+		});
 	});
 
 	describe('.dequeue()', () => {
@@ -339,7 +566,7 @@ describe('queue', () => {
 			);
 			expect(typeCard).not.toBe(null);
 
-			const producerOptions: ProducerOptions = {
+			const producerOptions: queue.ProducerOptions = {
 				action: 'action-create-card@1.0.0',
 				context: context.context,
 				card: typeCard!.id,
@@ -393,6 +620,294 @@ describe('queue', () => {
 			expect(currentRequest).not.toBe(null);
 
 			expect(currentRequest!.links).toEqual({});
+		});
+	});
+
+	describe('.getNextExecutionDateTime()', () => {
+		test('should return null if scheduled action does not exist', async () => {
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				context.generateRandomID(),
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return null if scheduled action is not active', async () => {
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					active: false,
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date: new Date().toISOString(),
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return null if one-time date is not in the future', async () => {
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date: new Date(
+									new Date().setDate(new Date().getDate() - 1),
+								).toISOString(),
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return null if start date is in the future', async () => {
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							recurring: {
+								start: new Date(
+									new Date().setDate(new Date().getDate() + 1),
+								).toISOString(),
+								end: new Date(
+									new Date().setDate(new Date().getDate() + 2),
+								).toISOString(),
+								interval: '* * * * *',
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return null if end date is in the past', async () => {
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							recurring: {
+								start: new Date(
+									new Date().setDate(new Date().getDate() - 2),
+								).toISOString(),
+								end: new Date(
+									new Date().setDate(new Date().getDate() - 1),
+								).toISOString(),
+								interval: '* * * * *',
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return null if end date is before start date', async () => {
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							recurring: {
+								start: new Date(
+									new Date().setDate(new Date().getDate() + 2),
+								).toISOString(),
+								end: new Date(
+									new Date().setDate(new Date().getDate() + 1),
+								).toISOString(),
+								interval: '* * * * *',
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toBe(null);
+		});
+
+		test('should return set date if one-time date is in the future', async () => {
+			const date = new Date(
+				new Date().setDate(new Date().getDate() + 1),
+			).toISOString();
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							once: {
+								date,
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toEqual(date);
+		});
+
+		test('should return expected future interval date', async () => {
+			const interval = '* * * * *';
+			const scheduledAction = await context.kernel.insertCard(
+				context.context,
+				context.session,
+				{
+					type: 'scheduled-action@1.0.0',
+					slug: context.generateRandomSlug({
+						prefix: 'scheduled-action',
+					}),
+					data: {
+						options: {
+							context: context.context,
+							action: 'action-create-card@1.0.0',
+							card: context.generateRandomID(),
+							type: 'type',
+							arguments: {},
+						},
+						schedule: {
+							recurring: {
+								start: new Date(
+									new Date().setDate(new Date().getDate() - 1),
+								).toISOString(),
+								end: new Date(
+									new Date().setDate(new Date().getDate() + 1),
+								).toISOString(),
+								interval,
+							},
+						},
+					},
+				},
+			);
+
+			strict(context.queue.producer.getNextExecutionDateTime);
+			const result = await context.queue.producer.getNextExecutionDateTime(
+				context.context,
+				context.session,
+				scheduledAction.id,
+			);
+			expect(result).toEqual(parseExpression(interval).next().toISOString());
 		});
 	});
 });

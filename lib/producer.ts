@@ -16,6 +16,7 @@ import {
 	ActionRequestData,
 	Context,
 	JellyfishKernel,
+	ScheduledActionContract,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
 import Bluebird from 'bluebird';
@@ -24,6 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as graphileWorker from 'graphile-worker';
 import { getLogger } from '@balena/jellyfish-logger';
 import * as assert from '@balena/jellyfish-assert';
+import { parseExpression } from 'cron-parser';
 import * as errors from './errors';
 import * as events from './events';
 import { contracts } from './contracts';
@@ -149,6 +151,9 @@ export class Producer implements QueueProducer {
 						id: cards.target!.id,
 					},
 					arguments: options.arguments,
+					schedule: options.schedule,
+					card: options.card,
+					type: options.type,
 				},
 			},
 		);
@@ -176,6 +181,31 @@ export class Producer implements QueueProducer {
 		options: ProducerOptions,
 	): Promise<ActionRequestContract> {
 		const request = await this.storeRequest(actor, session, options);
+		let jobName = 'enqueue-action-request';
+		let jobParameters = `'actionRequest', $1`;
+
+		// Handle scheduled actions
+		if (options.schedule) {
+			// Delete any existing jobs from queue using the scheduled-action contract ID
+			await this.jellyfish.backend.connection.any({
+				text: `SELECT graphile_worker.remove_job($1);`,
+				values: [options.schedule],
+			});
+
+			// Set runAt if action should be scheduled, return if not
+			const runAt = await this.getNextExecutionDateTime(
+				options.context,
+				session,
+				options.schedule,
+			);
+			if (!runAt) {
+				return request;
+			}
+			jobName = `enqueue-action-request-${uuidv4()}`;
+			jobParameters = jobParameters.concat(
+				`, run_at := '${runAt}', job_key := '${options.schedule}'`,
+			);
+		}
 
 		logger.info(options.context, 'Enqueueing request', {
 			actor,
@@ -187,8 +217,8 @@ export class Producer implements QueueProducer {
 		});
 
 		await this.jellyfish.backend.connection.any({
-			name: 'enqueue-action-request',
-			text: "SELECT graphile_worker.add_job('actionRequest', $1);",
+			name: jobName,
+			text: `SELECT graphile_worker.add_job(${jobParameters});`,
 			values: [request],
 		});
 
@@ -277,5 +307,44 @@ export class Producer implements QueueProducer {
 			this.session,
 			originator,
 		);
+	}
+
+	/**
+	 * @summary Get the next execute date-time for a scheduled action
+	 *
+	 * @param schedule - ProducerOptions.schedule object
+	 * @returns next execution date iso string, or null if no more execution dates are found
+	 */
+	async getNextExecutionDateTime(
+		context: Context,
+		session: string,
+		scheduledActionId: string,
+	): Promise<string | null> {
+		const scheduledAction =
+			await this.jellyfish.getCardById<ScheduledActionContract>(
+				context,
+				session,
+				scheduledActionId,
+			);
+		const now = new Date();
+		if (scheduledAction && scheduledAction.active) {
+			if (scheduledAction.data.schedule.once) {
+				const next = new Date(scheduledAction.data.schedule.once.date);
+				if (next > now) {
+					return scheduledAction.data.schedule.once.date;
+				}
+			} else if (scheduledAction.data.schedule.recurring) {
+				const start = new Date(scheduledAction.data.schedule.recurring.start);
+				const end = new Date(scheduledAction.data.schedule.recurring.end);
+				const next = parseExpression(
+					scheduledAction.data.schedule.recurring.interval,
+				).next();
+				if (start < now && end > now && next.toDate() < end) {
+					return next.toISOString();
+				}
+			}
+		}
+
+		return null;
 	}
 }
