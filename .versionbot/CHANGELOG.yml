@@ -1,4 +1,25 @@
 - commits:
+    - subject: Update files to use secrets
+      hash: 3047ad1f4164e2eb5264d473c93478987663ac49
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: "\U0001F504 Synced file(s) with product-os/secrets"
+      hash: 0f848cc226088ba6d7bef7f0763f6ff5afbfad03
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 1.0.252
+  date: 2021-09-01T00:30:10.406Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-logger to ^3.0.60'
       hash: 6cd23df7d6d2f0001501a0b4781b10860e5bf7dc
       body: ''
