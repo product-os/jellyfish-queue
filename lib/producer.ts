@@ -182,7 +182,9 @@ export class Producer implements QueueProducer {
 	): Promise<ActionRequestContract> {
 		const request = await this.storeRequest(actor, session, options);
 		let jobName = 'enqueue-action-request';
-		let jobParameters = `'actionRequest', $1`;
+
+		const jobParameters: string[] = [`'actionRequest'`, '$1'];
+		const values: any[] = [request];
 
 		// Handle scheduled actions
 		if (options.schedule) {
@@ -202,9 +204,8 @@ export class Producer implements QueueProducer {
 				return request;
 			}
 			jobName = `enqueue-action-request-${uuidv4()}`;
-			jobParameters = jobParameters.concat(
-				`, run_at := '${runAt}', job_key := '${options.schedule}'`,
-			);
+			jobParameters.push('run_at := $2', 'job_key := $3');
+			values.push(runAt, options.schedule);
 		}
 
 		logger.info(options.context, 'Enqueueing request', {
@@ -218,8 +219,8 @@ export class Producer implements QueueProducer {
 
 		await this.jellyfish.backend.connection.any({
 			name: jobName,
-			text: `SELECT graphile_worker.add_job(${jobParameters});`,
-			values: [request],
+			text: `SELECT graphile_worker.add_job(${jobParameters.join(',')});`,
+			values,
 		});
 
 		return request;
