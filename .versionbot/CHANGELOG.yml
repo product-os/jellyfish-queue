@@ -1,4 +1,21 @@
 - commits:
+    - subject: Don't use deterministic slugs for execute contracts
+      hash: 380d5395219770e284afb38e03ce27bc84a3acc1
+      body: |
+        Previously, an execute slug was built from the ID of the action request,
+        this prevented action requests from being retried, as the slug would
+        already exist and cause a conflict. This compromises the resilience of
+        the system, as we do want to retry ARs under certain circumstances.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+      nested: []
+  version: 1.0.264
+  date: 2021-09-07T09:53:21.478Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^5.7.0'
       hash: 7535fbc70c5a9759b11d8c4953c820b910b238dd
       body: |
