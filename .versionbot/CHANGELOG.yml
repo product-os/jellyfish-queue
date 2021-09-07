@@ -1,4 +1,37 @@
 - commits:
+    - subject: Update code
+      hash: 40d01bcd05eaaaf876017b4c49659c599c06ccae
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Clean up job insert prep
+      hash: 597682caac7711de73fdcc9689c1bbae080b65da
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Add scheduled action support
+      hash: c19a907f15d576e1560791e626744ad722a8b7f0
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.1.0
+  date: 2021-09-07T03:15:11.398Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^5.7.0'
       hash: 7535fbc70c5a9759b11d8c4953c820b910b238dd
       body: |
