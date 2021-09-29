@@ -13,7 +13,6 @@ import type {
 import {
 	ActionContract,
 	ActionRequestContract,
-	ActionRequestData,
 	Context,
 	JellyfishKernel,
 	SessionContract,
@@ -132,7 +131,7 @@ export class Producer implements QueueProducer {
 
 		// Use the Queue's session instead of the session passed as a parameter as the
 		// passed session shouldn't have permissions to create action requests
-		return this.jellyfish.insertCard<ActionRequestData>(
+		return this.jellyfish.insertCard<ActionRequestContract>(
 			options.context,
 			this.session,
 			{
