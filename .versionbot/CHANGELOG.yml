@@ -1,4 +1,17 @@
 - commits:
+    - subject: Fix incorrect typings
+      hash: 09f6647e6d2a72e83fa285d58bf64f59ec069a42
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.264
+  date: 2021-09-29T06:34:00.825Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^5.7.0'
       hash: 7535fbc70c5a9759b11d8c4953c820b910b238dd
       body: |
