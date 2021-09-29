@@ -1,4 +1,25 @@
 - commits:
+    - subject: Add typedoc to depcheck ignore list
+      hash: 42ddbe01d337d94e96f1bd331f2ce4f96186541e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: 'patch: Update external-non-major'
+      hash: 655da512f1c5cae1ba484b60ef2d4686760183c6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.269
+  date: 2021-09-29T07:44:41.293Z
+- commits:
     - subject: Ignore decrypted mailgun and meet secrets
       hash: 728088b7d55f42b263fdaad9d912de7610feaeb2
       body: ''
