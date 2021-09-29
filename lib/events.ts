@@ -35,19 +35,6 @@ const EXECUTION_EVENT_TYPE: string = 'execute';
 const EXECUTION_EVENT_VERSION: string = '1.0.0';
 
 /**
- * @summary Get the slug of an execute event card
- * @function
- * @public
- *
- * @param {Object} options - options
- * @param {String} options.id - request id
- * @returns {String} slug
- */
-export const getExecuteEventSlug = (options: { id: string }): string => {
-	return `${EXECUTION_EVENT_TYPE}-${options.id}`;
-};
-
-/**
  * @summary Create request execution event
  * @function
  * @public
@@ -104,11 +91,8 @@ export const post = async (
 		},
 	};
 
-	const contents: ExecuteContractDefinition = {
+	const contents: Omit<ExecuteContractDefinition, 'slug'> = {
 		type: `${EXECUTION_EVENT_TYPE}@${EXECUTION_EVENT_VERSION}`,
-		slug: getExecuteEventSlug({
-			id: options.id,
-		}),
 		version: EXECUTION_EVENT_VERSION,
 		active: true,
 		markers: [],
