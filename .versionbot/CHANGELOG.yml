@@ -1,4 +1,25 @@
 - commits:
+    - subject: Ignore decrypted mailgun and meet secrets
+      hash: 728088b7d55f42b263fdaad9d912de7610feaeb2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: "\U0001F504 Synced file(s) with product-os/secrets"
+      hash: b629af7b9c2af42293537e7e5de06c97d0dcab41
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 1.0.268
+  date: 2021-09-29T07:28:20.758Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to v6'
       hash: a739d51875d0edb9fb8ffd48c6a93cacf8009ca1
       body: |
