@@ -18,7 +18,6 @@ import {
 	Context,
 	JellyfishKernel,
 	LinkContract,
-	LinkData,
 } from '@balena/jellyfish-types/build/core';
 import { core } from '@balena/jellyfish-types';
 import {
@@ -51,7 +50,7 @@ const linkExecuteEvent = async (
 	eventCard: ExecuteContract,
 	actionRequest: ActionRequestContract,
 ): Promise<LinkContract> => {
-	return jellyfish.insertCard<LinkData>(context, session, {
+	return jellyfish.insertCard<LinkContract>(context, session, {
 		slug: getExecuteLinkSlug(actionRequest),
 		type: 'link@1.0.0',
 		version: EXECUTE_LINK_VERSION,

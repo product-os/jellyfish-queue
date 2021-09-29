@@ -122,7 +122,7 @@ export const post = async (
 		contents.data.originator = options.originator;
 	}
 
-	return jellyfish.insertCard(context, session, contents);
+	return jellyfish.insertCard<ExecuteContract>(context, session, contents);
 };
 
 /**
