@@ -1,4 +1,15 @@
 - commits:
+    - subject: "\U0001F504 Synced file(s) with product-os/jellyfish-config"
+      hash: 4fd7cdd47fda5ffdd5a3db3a482f9990d868f565
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 1.0.276
+  date: 2021-10-04T05:43:06.862Z
+- commits:
     - subject: 'Update test:compose to match image name'
       hash: 51f86b51498926e7f849c287ce9af218a0f0c36b
       body: ''
