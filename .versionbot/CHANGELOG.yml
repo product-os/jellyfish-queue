@@ -1,4 +1,15 @@
 - commits:
+    - subject: "\U0001F504 Synced file(s) with product-os/secrets"
+      hash: 6cee1724e102295126e4d3fabed65a46def0c8aa
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 1.0.288
+  date: 2021-10-15T09:01:39.378Z
+- commits:
     - subject: 'patch: Update dependency lint-staged to ^11.2.3'
       hash: 10edfb05b8122a1659a7faa24adcfefb20a60daa
       body: ''
