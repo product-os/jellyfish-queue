@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-core to v7'
+      hash: c8025af757c7ee77f670797b0965eeed23388ac5
+      body: |
+        Update @balena/jellyfish-core from 6.2.0 to 7.0.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.291
+  date: 2021-10-22T23:21:29.320Z
+- commits:
     - subject: 'patch: Update external-non-major'
       hash: a7d50b718e30348129dd691135cd5c8b1001a190
       body: ''
