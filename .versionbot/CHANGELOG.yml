@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-core to v8'
+      hash: b52ffb1ce6bd0ec676eb2be575097137aee193af
+      body: |
+        Update @balena/jellyfish-core from 7.0.2 to 8.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.314
+  date: 2021-11-05T11:01:48.791Z
+- commits:
     - subject: Add retry for graphile in producer
       hash: ce2e12f971382de096cc9a5570dc92eaf578d641
       body: ''
