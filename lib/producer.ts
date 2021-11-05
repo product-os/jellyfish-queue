@@ -29,6 +29,9 @@ import { contracts } from './contracts';
 
 const logger = getLogger(__filename);
 
+const GRAPHILE_RETRIES = 10;
+const GRAPHILE_RETRY_DELAY = 1000;
+
 /**
  * Queue module for Jellyfish.
  *
@@ -53,10 +56,43 @@ export class Producer implements QueueProducer {
 
 		// Set up the graphile worker to ensure that the graphile_worker schema
 		// exists in the DB before we attempt to enqueue a job.
-		const workerUtils = await graphileWorker.makeWorkerUtils({
-			pgPool: this.jellyfish.backend.connection.$pool,
-		});
+		const workerUtils = await this.makeWorkerUtils(context);
 		workerUtils.release();
+	}
+
+	/**
+	 * @summary Make and return Graphile worker utils instance
+	 * @function
+	 *
+	 * @param context - execution context
+	 * @param retries - number of times to retry Graphile worker initialization
+	 * @returns Graphile worker utils instance
+	 *
+	 * @example
+	 * ```typescript
+	 * const workerUtils = await this.makeWorkerUtils(context);
+	 * ```
+	 */
+	async makeWorkerUtils(
+		context: Context,
+		retries: number = GRAPHILE_RETRIES,
+	): Promise<graphileWorker.WorkerUtils> {
+		try {
+			const workerUtils = await graphileWorker.makeWorkerUtils({
+				pgPool: this.jellyfish.backend.connection.$pool,
+			});
+			return workerUtils;
+		} catch (error) {
+			if (retries > 0) {
+				logger.info(context, 'Graphile worker failed to run', {
+					retries,
+					error,
+				});
+				await Bluebird.delay(GRAPHILE_RETRY_DELAY);
+				return this.makeWorkerUtils(context, retries - 1);
+			}
+			throw error;
+		}
 	}
 
 	// FIXME this function exists solely for the purpose of allowing upstream code
