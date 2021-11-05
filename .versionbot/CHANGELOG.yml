@@ -1,4 +1,17 @@
 - commits:
+    - subject: Add retry for graphile in producer
+      hash: ce2e12f971382de096cc9a5570dc92eaf578d641
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.313
+  date: 2021-11-05T03:38:19.256Z
+- commits:
     - subject: "\U0001F504 Synced file(s) with product-os/secrets"
       hash: 1a31e4e3c64ee1f0fab683f351043dec603f6499
       body: ''
