@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update resinci/jellyfish-test Docker tag to v1.4.12'
+      hash: 6a53817acd33fb8a41c21432be7250a245c41277
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.318
+  date: 2021-11-07T03:53:34.110Z
+- commits:
     - subject: 'patch: Update dependency typedoc to ^0.22.8'
       hash: 619082daa94677dff7701d588116c6ffdf37fca5
       body: ''
