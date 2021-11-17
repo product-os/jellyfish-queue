@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update git secrets
+      hash: 1719a5f5589f4c59ed12b4b4e85b7bfc31835424
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.337
+  date: 2021-11-17T08:22:25.662Z
+- commits:
     - subject: 'Update test:compose'
       hash: 61c286c5ba665a9d5ddc6f658130ae1eda8e8777
       body: ''
