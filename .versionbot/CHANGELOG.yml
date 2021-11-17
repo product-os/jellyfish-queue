@@ -1,4 +1,17 @@
 - commits:
+    - subject: 'Update test:compose'
+      hash: 61c286c5ba665a9d5ddc6f658130ae1eda8e8777
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.336
+  date: 2021-11-17T00:16:35.488Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: e3fecee3c1b26309b1c4a9fbc2172f146ad85cad
       body: ''
