@@ -61,7 +61,7 @@
   "devDependencies": {
     "@balena/jellycheck": "^0.1.8",
     "@balena/jellyfish-config": "^1.5.1",
-    "@balena/jellyfish-core": "^8.0.0",
+    "@balena/jellyfish-core": "^8.1.0",
     "@balena/jellyfish-types": "^1.2.2",
     "@balena/lint": "^6.1.1",
     "@types/bluebird": "^3.5.36",
@@ -78,7 +78,7 @@
     "typescript": "^4.4.4"
   },
   "peerDependencies": {
-    "@balena/jellyfish-core": "^8.0.0"
+    "@balena/jellyfish-core": "^8.1.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
