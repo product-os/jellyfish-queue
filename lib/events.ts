@@ -1,9 +1,3 @@
-/*
- * Copyright (C) Balena.io - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited.
- * Proprietary and confidential.
- */
-
 import Bluebird from 'bluebird';
 import { getLogger } from '@balena/jellyfish-logger';
 import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
