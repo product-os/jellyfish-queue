@@ -1,4 +1,33 @@
 - commits:
+    - subject: 'patch: Update internal-patch'
+      hash: a474cfb5d3ef010fcf98318aa33f8acc051a039a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+    - subject: 'patch: Update internal-patch'
+      hash: b705ee4e397a2bf86f8fcdf614ec615488b084de
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+    - subject: Remove license headers
+      hash: 7d40bc15f1d2ba1d4b2fe36b9ee214b0236e0657
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.341
+  date: 2021-11-22T02:00:31.085Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.394'
       hash: 82556029b09710049a9db1b084c755e95af2784b
       body: ''
