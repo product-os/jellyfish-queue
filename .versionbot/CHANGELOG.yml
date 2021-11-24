@@ -1,4 +1,15 @@
 - commits:
+    - subject: "\U0001F504 Synced file(s) with product-os/jellyfish-config"
+      hash: 91c42c7f8e4cd88a8eb44455dde5ff2cee566bae
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 1.0.346
+  date: 2021-11-24T05:57:45.247Z
+- commits:
     - subject: 'patch: Update dependency lint-staged to ^12.1.2'
       hash: 8d01894a6b3b9255df225358588d4523b7d9289a
       body: ''
