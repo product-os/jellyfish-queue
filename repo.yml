@@ -10,5 +10,3 @@ upstream:
     url: 'https://github.com/product-os/jellyfish-metrics'
   - repo: 'jellyfish-core'
     url: 'https://github.com/product-os/jellyfish-core'
-  - repo: 'jellycheck'
-    url: 'https://github.com/product-os/jellycheck'
