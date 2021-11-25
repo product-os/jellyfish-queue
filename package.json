@@ -33,7 +33,7 @@
   "scripts": {
     "clean": "rimraf build",
     "build": "npm run clean && tsc -p tsconfig.build.json",
-    "lint": "balena-lint lib test && jellycheck && deplint && depcheck --ignore-bin-package --ignores=winston-transport,@types/jest,typedoc",
+    "lint": "balena-lint lib test && deplint && depcheck --ignore-bin-package --ignores=winston-transport,@types/jest,typedoc",
     "lint:fix": "balena-lint --fix lib test",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "jest \"lib/.*\\.spec\\.ts\"",
@@ -59,7 +59,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@balena/jellycheck": "^1.0.0",
     "@balena/jellyfish-config": "^1.5.1",
     "@balena/jellyfish-core": "^8.1.0",
     "@balena/jellyfish-types": "^1.2.2",
