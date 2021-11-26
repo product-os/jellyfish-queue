@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'patch: Update dependency typescript to ^4.5.2'
+      hash: 75c321455dbd1a37daac84c80290efde3ea7959c
+      body: |
+        Update typescript from 4.4.4 to 4.5.2
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.354
+  date: 2021-11-25T10:37:31.837Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: 78cece1001f99083e993768bb37676ea18605d7a
       body: ''
