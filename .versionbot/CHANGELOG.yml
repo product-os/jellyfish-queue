@@ -1,4 +1,17 @@
 - commits:
+    - subject: Remove old sync comments
+      hash: 28eb13cf1bdae093b17c3db91c278095d589d80f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.362
+  date: 2021-11-28T05:11:59.565Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: dbcc7945fafccdd616393d60aea1ff56cd3625d2
       body: ''
