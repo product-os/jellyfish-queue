@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.424'
+      hash: a4517899d1e89cc5dbb4d9676b2ddc66e863f2ef
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.0.373
+  date: 2021-12-02T10:13:11.989Z
+- commits:
     - subject: Remove .gitsecret directory
       hash: fd940c5c6c46e91048510a16dd95b2e34e47c571
       body: ''
