@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update readme
+      hash: 632f14ea92a6b4479543fe56508e3e80a50af4cd
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.374
+  date: 2021-12-03T01:45:02.068Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^1.0.424'
       hash: a4517899d1e89cc5dbb4d9676b2ddc66e863f2ef
       body: ''
