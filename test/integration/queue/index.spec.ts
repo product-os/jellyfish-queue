@@ -163,7 +163,6 @@ describe('queue', () => {
 			// 		throw new Error("Didn't dequeue in time");
 			// 	}
 
-			// 	await Bluebird.delay(100);
 			// 	return dequeue(times - 1);
 			// };
 

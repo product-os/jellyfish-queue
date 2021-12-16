@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird';
 import { v4 as uuidv4 } from 'uuid';
 import * as helpers from '../backend-helpers';
 import * as queue from '../../../lib';
@@ -94,7 +93,9 @@ export const before = async (
 				return null;
 			}
 
-			await Bluebird.delay(10);
+			await new Promise((resolve) => {
+				setTimeout(resolve, 10);
+			});
 			return dequeue(times - 1);
 		}
 

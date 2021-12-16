@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import * as events from './events';
-import Bluebird from 'bluebird';
 import * as graphileWorker from 'graphile-worker';
 import { Logger } from '@graphile/logger';
 import { getLogger } from '@balena/jellyfish-logger';
@@ -74,9 +73,11 @@ export class Consumer implements QueueConsumer {
 		onMessageEventHandler: OnMessageEventHandler,
 	): Promise<void> {
 		logger.info(context, 'Inserting essential cards');
-		await Bluebird.map(Object.values(contracts), async (contract) => {
-			return this.jellyfish.replaceCard(context, this.session, contract);
-		});
+		await Promise.all(
+			Object.values(contracts).map(async (card) => {
+				return this.jellyfish.replaceCard(context, this.session, card);
+			}),
+		);
 
 		await this.run(context, onMessageEventHandler);
 		this.graphileRunner!.stop = _.once(this.graphileRunner!.stop);
@@ -118,7 +119,9 @@ export class Consumer implements QueueConsumer {
 					retries,
 					error,
 				});
-				await Bluebird.delay(RUN_RETRY_DELAY);
+				await new Promise((resolve) => {
+					setTimeout(resolve, RUN_RETRY_DELAY);
+				});
 				return this.run(context, onMessageEventHandler, retries - 1);
 			}
 			throw error;
@@ -132,7 +135,9 @@ export class Consumer implements QueueConsumer {
 			await this.graphileRunner.stop();
 		}
 		while (this.messagesBeingHandled > 0) {
-			await Bluebird.delay(10);
+			await new Promise((resolve) => {
+				setTimeout(resolve, 10);
+			});
 		}
 	}
 

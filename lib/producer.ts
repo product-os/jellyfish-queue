@@ -11,12 +11,12 @@ import {
 	JellyfishKernel,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import Bluebird from 'bluebird';
 import { v4 as isUUID } from 'is-uuid';
 import { v4 as uuidv4 } from 'uuid';
 import * as graphileWorker from 'graphile-worker';
 import { getLogger } from '@balena/jellyfish-logger';
 import * as assert from '@balena/jellyfish-assert';
+import { strict as nativeAssert } from 'assert';
 import * as errors from './errors';
 import * as events from './events';
 import { contracts } from './contracts';
@@ -25,6 +25,18 @@ const logger = getLogger(__filename);
 
 const GRAPHILE_RETRIES = 10;
 const GRAPHILE_RETRY_DELAY = 1000;
+
+async function props(obj: any) {
+	const keys = Object.keys(obj);
+	const values = Object.values(obj);
+	return Promise.all(values).then((resolved) => {
+		const result = {};
+		for (let i = 0; i < keys.length; i += 1) {
+			result[keys[i]] = resolved[i];
+		}
+		return result;
+	});
+}
 
 /**
  * Queue module for Jellyfish.
@@ -44,9 +56,11 @@ export class Producer implements QueueProducer {
 	 */
 	async initialize(context: Context): Promise<void> {
 		logger.info(context, 'Inserting essential cards');
-		await Bluebird.map(Object.values(contracts), async (card) => {
-			return this.jellyfish.replaceCard(context, this.session, card);
-		});
+		await Promise.all(
+			Object.values(contracts).map(async (card) => {
+				return this.jellyfish.replaceCard(context, this.session, card);
+			}),
+		);
 
 		// Set up the graphile worker to ensure that the graphile_worker schema
 		// exists in the DB before we attempt to enqueue a job.
@@ -82,7 +96,9 @@ export class Producer implements QueueProducer {
 					retries,
 					error,
 				});
-				await Bluebird.delay(GRAPHILE_RETRY_DELAY);
+				await new Promise((resolve) => {
+					setTimeout(resolve, GRAPHILE_RETRY_DELAY);
+				});
 				return this.makeWorkerUtils(context, retries - 1);
 			}
 			throw error;
@@ -113,7 +129,7 @@ export class Producer implements QueueProducer {
 
 		// Use the request session to retrieve the various cards, this ensures that
 		// the action cannot be run if the session doesn't have access to the cards.
-		const cards = await Bluebird.props({
+		const cards: any = await props({
 			target: isUUID(options.card)
 				? {
 						id: options.card,
@@ -264,9 +280,12 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		assert.INTERNAL(context, request, errors.QueueNoRequest, () => {
-			return `Request not found: ${JSON.stringify(actionRequest, null, 2)}`;
-		});
+		nativeAssert(
+			request,
+			new errors.QueueNoRequest(
+				`Request not found: ${JSON.stringify(actionRequest, null, 2)}`,
+			),
+		);
 		assert.INTERNAL(
 			context,
 			request.data.payload,

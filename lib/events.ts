@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird';
 import { getLogger } from '@balena/jellyfish-logger';
 import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
 import type { JSONSchema } from '@balena/jellyfish-types';
@@ -216,7 +215,7 @@ export const wait = async (
 	jellyfish: JellyfishKernel,
 	session: string,
 	options: WaitOptions,
-): Promise<ExecuteContract> => {
+): Promise<ExecuteContract | undefined> => {
 	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`;
 	const schema: JSONSchema = {
 		type: 'object',
@@ -267,7 +266,7 @@ export const wait = async (
 		stream.close();
 	});
 
-	return new Bluebird((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		stream.once('error', (error) => {
 			stream.removeAllListeners();
 			logger.exception(context, 'Wait stream error', error);
