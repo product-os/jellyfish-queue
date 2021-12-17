@@ -215,7 +215,7 @@ export const wait = async (
 	jellyfish: JellyfishKernel,
 	session: string,
 	options: WaitOptions,
-): Promise<ExecuteContract | undefined> => {
+): Promise<ExecuteContract> => {
 	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`;
 	const schema: JSONSchema = {
 		type: 'object',
@@ -248,7 +248,7 @@ export const wait = async (
 		},
 	};
 
-	let result: ExecuteContract | null = null;
+	let result: ExecuteContract;
 
 	const stream = await jellyfish.stream(context, session, schema);
 	logger.info(context, 'Wait stream opened', {
@@ -279,7 +279,7 @@ export const wait = async (
 				slug,
 			});
 
-			resolve(result || undefined);
+			resolve(result);
 		});
 
 		// Don't perform a "get by slug" if we already have a match.
