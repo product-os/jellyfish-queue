@@ -48,7 +48,7 @@
   "dependencies": {
     "@balena/jellyfish-assert": "^1.2.0",
     "@balena/jellyfish-environment": "^6.0.2",
-    "@balena/jellyfish-logger": "^3.1.0",
+    "@balena/jellyfish-logger": "^4.0.1",
     "@balena/jellyfish-metrics": "^1.0.439",
     "@graphile/logger": "^0.2.0",
     "bluebird": "^3.7.2",
@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@balena/jellyfish-config": "^2.0.2",
-    "@balena/jellyfish-core": "^8.2.0",
+    "@balena/jellyfish-core": "^8.2.2",
     "@balena/jellyfish-types": "^1.2.39",
     "@balena/lint": "^6.2.0",
     "@types/bluebird": "^3.5.36",
@@ -76,7 +76,7 @@
     "typescript": "^4.5.4"
   },
   "peerDependencies": {
-    "@balena/jellyfish-core": "^8.2.0"
+    "@balena/jellyfish-core": "^8.2.2"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
