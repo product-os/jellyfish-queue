@@ -1,4 +1,27 @@
 - commits:
+    - subject: Update wait() return type
+      hash: e908d049b853bf8ee8c203c5dba0f1a94d67b0b1
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+    - subject: Remove Bluebird
+      hash: 7f48beb110ab2d8480c0f27822c299cd889e1811
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 1.0.395
+  date: 2021-12-17T09:53:38.721Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-logger to ^3.1.0'
       hash: a940461b2186b27cf761f464cb25a89faf4ee1d6
       body: |
