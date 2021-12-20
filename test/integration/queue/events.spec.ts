@@ -1,5 +1,5 @@
+import { strict as assert } from 'assert';
 import { omit } from 'lodash';
-import Bluebird from 'bluebird';
 import * as helpers from './helpers';
 import { events } from '../../../lib';
 
@@ -184,13 +184,15 @@ describe('events', () => {
 					// Otherwise, we close the underlying connections while the rest
 					// of the code of upsertObject is still running, causing errors
 					// unrelated to the test
-					await Bluebird.delay(500);
+					await new Promise((resolve) => {
+						setTimeout(resolve, 500);
+					});
 					done();
 				})
 				.catch(done);
 
-			Bluebird.delay(500)
-				.then(() => {
+			setTimeout(() => {
+				try {
 					return events.post(
 						context.context,
 						context.kernel,
@@ -209,8 +211,10 @@ describe('events', () => {
 							},
 						},
 					);
-				})
-				.catch(done);
+				} catch (_err) {
+					done();
+				}
+			}, 500);
 		});
 
 		test('should return if the card already exists', async () => {
@@ -246,6 +250,7 @@ describe('events', () => {
 				},
 			);
 
+			assert(card);
 			expect(card.type).toBe('execute@1.0.0');
 			expect(card.data.target).toBe(id);
 			expect(card.data.actor).toBe('57692206-8da2-46e1-91c9-159b2c6928ef');
@@ -266,13 +271,14 @@ describe('events', () => {
 					actor: BIG_EXECUTE_CARD.data.actor,
 				})
 				.then((card) => {
+					assert(card);
 					expect(card.data.payload).toEqual(BIG_EXECUTE_CARD.data.payload);
 					done();
 				})
 				.catch(done);
 
-			Bluebird.delay(100)
-				.then(() => {
+			setTimeout(() => {
+				try {
 					// Use the backend class directly so we can inject "links"
 					context.backend
 						.insertElement(context.context, BIG_EXECUTE_CARD)
@@ -285,8 +291,10 @@ describe('events', () => {
 								}),
 							);
 						});
-				})
-				.catch(done);
+				} catch (_err) {
+					done();
+				}
+			}, 100);
 		});
 
 		test('should be able to access the event payload', async () => {
@@ -319,6 +327,7 @@ describe('events', () => {
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
 				},
 			);
+			assert(card);
 
 			expect(card.data.payload).toEqual({
 				action: '57692206-8da2-46e1-91c9-159b2c6928ef',
@@ -341,6 +350,7 @@ describe('events', () => {
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
 				})
 				.then((request) => {
+					assert(request);
 					expect(request.data.payload.timestamp).toBe(
 						'2020-06-30T19:34:42.829Z',
 					);
@@ -349,8 +359,8 @@ describe('events', () => {
 				.catch(done);
 
 			const id2 = context.generateRandomID();
-			Bluebird.delay(100)
-				.then(async () => {
+			setTimeout(async () => {
+				try {
 					await events.post(
 						context.context,
 						context.kernel,
@@ -407,8 +417,10 @@ describe('events', () => {
 							},
 						},
 					);
-				})
-				.catch(done);
+				} catch (_err) {
+					done();
+				}
+			}, 100);
 		});
 	});
 
