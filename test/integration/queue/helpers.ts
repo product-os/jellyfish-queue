@@ -1,15 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as helpers from '../backend-helpers';
 import * as queue from '../../../lib';
+import { QueueConsumer } from '../../../lib/consumer';
+import { QueueProducer } from '../../../lib/producer';
 import {
+	ActionRequestContract,
 	SessionContract,
 	UserContract,
 } from '@balena/jellyfish-types/build/core';
-import {
-	QueueConsumer,
-	QueueProducer,
-} from '@balena/jellyfish-types/build/queue';
-import { core } from '@balena/jellyfish-types';
 
 const Consumer = queue.Consumer;
 const Producer = queue.Producer;
@@ -18,7 +16,7 @@ export interface IntegrationCoreTestContext {
 	session: string;
 	actor: UserContract;
 	queueActor: string;
-	dequeue: (times?: number) => Promise<core.ActionRequestContract | null>;
+	dequeue: (times?: number) => Promise<ActionRequestContract | null>;
 	queue: {
 		consumer: QueueConsumer;
 		producer: QueueProducer;
@@ -39,32 +37,25 @@ const actionCreateCard = {
 	},
 };
 
-export const before = async (
-	contextInput: Partial<IntegrationTestContext> = {},
-	options?: helpers.BackendTestOptions,
-): Promise<IntegrationTestContext> => {
-	const context = (await helpers.before(
-		contextInput,
-		options && {
-			suffix: options.suffix,
-		},
-	)) as helpers.BackendTestContext & Partial<IntegrationCoreTestContext>;
-	context.session = context.kernel.sessions.admin;
+export const before = async (): Promise<IntegrationTestContext> => {
+	const context = (await helpers.before()) as helpers.BackendTestContext &
+		Partial<IntegrationCoreTestContext>;
+	context.session = context.kernel.sessions!.admin;
 
 	const session = await context.kernel.getCardById<SessionContract>(
-		context.context,
+		context.logContext,
 		context.session,
 		context.session,
 	);
 
 	context.actor = (await context.kernel.getCardById<UserContract>(
-		context.context,
+		context.logContext,
 		context.session,
 		session!.data.actor as string,
 	)) as UserContract;
 
 	await context.kernel.insertCard(
-		context.context,
+		context.logContext,
 		context.session,
 		actionCreateCard,
 	);
@@ -74,11 +65,11 @@ export const before = async (
 		producer: new Producer(context.kernel, context.session),
 	};
 
-	const consumedActionRequests: core.ActionRequestContract[] = [];
+	const consumedActionRequests: ActionRequestContract[] = [];
 
 	await context.queue.consumer.initializeWithEventHandler(
-		context.context,
-		async (payload: core.ActionRequestContract) => {
+		context.logContext,
+		async (payload: ActionRequestContract) => {
 			consumedActionRequests.push(payload);
 		},
 	);
@@ -87,7 +78,7 @@ export const before = async (
 
 	const dequeue = async (
 		times: number = 50,
-	): Promise<core.ActionRequestContract | null> => {
+	): Promise<ActionRequestContract | null> => {
 		if (consumedActionRequests.length === 0) {
 			if (times <= 0) {
 				return null;
@@ -99,12 +90,12 @@ export const before = async (
 			return dequeue(times - 1);
 		}
 
-		return consumedActionRequests.shift() as core.ActionRequestContract;
+		return consumedActionRequests.shift() as ActionRequestContract;
 	};
 
 	context.dequeue = dequeue;
 
-	await context.queue.producer.initialize(context.context);
+	await context.queue.producer.initialize(context.logContext);
 
 	return context as IntegrationTestContext;
 };

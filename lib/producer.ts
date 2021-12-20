@@ -1,30 +1,69 @@
-import type {
-	ExecuteContract,
-	ProducerOptions,
-	ProducerResults,
-	QueueProducer,
-} from '@balena/jellyfish-types/build/queue';
+import { strict as nativeAssert } from 'assert';
+import * as assert from '@balena/jellyfish-assert';
+import { CoreKernel } from '@balena/jellyfish-core';
+import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import {
 	ActionContract,
 	ActionRequestContract,
-	Context,
-	JellyfishKernel,
+	ContractData,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
+import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
+import * as graphileWorker from 'graphile-worker';
 import { v4 as isUUID } from 'is-uuid';
 import { v4 as uuidv4 } from 'uuid';
-import * as graphileWorker from 'graphile-worker';
-import { getLogger } from '@balena/jellyfish-logger';
-import * as assert from '@balena/jellyfish-assert';
-import { strict as nativeAssert } from 'assert';
+import { contracts } from './contracts';
 import * as errors from './errors';
 import * as events from './events';
-import { contracts } from './contracts';
 
 const logger = getLogger(__filename);
 
 const GRAPHILE_RETRIES = 10;
 const GRAPHILE_RETRY_DELAY = 1000;
+
+export interface ProducerOptions {
+	logContext: LogContext;
+	action: string;
+	card: string;
+	type: string;
+	arguments: ContractData;
+	currentDate?: Date;
+	originator?: string;
+	schedule?: string;
+}
+
+interface ProducerResults {
+	error: boolean;
+	timestamp: string;
+	data: ExecuteContract['data']['payload']['data'];
+}
+
+export interface QueueProducer {
+	initialize: (logContext: LogContext) => Promise<void>;
+	storeRequest: (
+		actor: string,
+		session: string,
+		options: ProducerOptions,
+	) => Promise<ActionRequestContract>;
+	enqueue: (
+		actor: string,
+		session: string,
+		options: ProducerOptions,
+	) => Promise<ActionRequestContract>;
+	waitResults: (
+		logContext: LogContext,
+		actionRequest: ActionRequestContract,
+	) => Promise<ProducerResults>;
+	getLastExecutionEvent: (
+		logContext: LogContext,
+		originator: string,
+	) => Promise<ExecuteContract | null>;
+	getNextExecutionDateTime?: (
+		logContext: LogContext,
+		session: string,
+		scheduledActionId: string,
+	) => Promise<string | null>;
+}
 
 async function props(obj: any) {
 	const keys = Object.keys(obj);
@@ -45,26 +84,26 @@ async function props(obj: any) {
  */
 
 export class Producer implements QueueProducer {
-	constructor(private jellyfish: JellyfishKernel, private session: string) {}
+	constructor(private jellyfish: CoreKernel, private session: string) {}
 
 	/**
 	 * @summary Initialize the queue producer
 	 * @function
 	 * @public
 	 *
-	 * @param context - execution context
+	 * @param logContext - log context
 	 */
-	async initialize(context: Context): Promise<void> {
-		logger.info(context, 'Inserting essential cards');
+	async initialize(logContext: LogContext): Promise<void> {
+		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.jellyfish.replaceCard(context, this.session, card);
+				return this.jellyfish.replaceCard(logContext, this.session, card);
 			}),
 		);
 
 		// Set up the graphile worker to ensure that the graphile_worker schema
 		// exists in the DB before we attempt to enqueue a job.
-		const workerUtils = await this.makeWorkerUtils(context);
+		const workerUtils = await this.makeWorkerUtils(logContext);
 		workerUtils.release();
 	}
 
@@ -72,7 +111,7 @@ export class Producer implements QueueProducer {
 	 * @summary Make and return Graphile worker utils instance
 	 * @function
 	 *
-	 * @param context - execution context
+	 * @param logContext - log context
 	 * @param retries - number of times to retry Graphile worker initialization
 	 * @returns Graphile worker utils instance
 	 *
@@ -82,24 +121,24 @@ export class Producer implements QueueProducer {
 	 * ```
 	 */
 	async makeWorkerUtils(
-		context: Context,
+		logContext: LogContext,
 		retries: number = GRAPHILE_RETRIES,
 	): Promise<graphileWorker.WorkerUtils> {
 		try {
 			const workerUtils = await graphileWorker.makeWorkerUtils({
-				pgPool: this.jellyfish.backend.connection.$pool,
+				pgPool: this.jellyfish.backend.connection!.$pool as any,
 			});
 			return workerUtils;
 		} catch (error) {
 			if (retries > 0) {
-				logger.info(context, 'Graphile worker failed to run', {
+				logger.info(logContext, 'Graphile worker failed to run', {
 					retries,
 					error,
 				});
 				await new Promise((resolve) => {
 					setTimeout(resolve, GRAPHILE_RETRY_DELAY);
 				});
-				return this.makeWorkerUtils(context, retries - 1);
+				return this.makeWorkerUtils(logContext, retries - 1);
 			}
 			throw error;
 		}
@@ -118,7 +157,7 @@ export class Producer implements QueueProducer {
 		const id = uuidv4();
 		const slug = `action-request-${id}`;
 
-		logger.debug(options.context, 'Storing request', {
+		logger.debug(options.logContext, 'Storing request', {
 			actor,
 			request: {
 				slug,
@@ -137,37 +176,37 @@ export class Producer implements QueueProducer {
 						// TODO: Require users to be explicit on the card version
 				  }
 				: this.jellyfish.getCardBySlug(
-						options.context,
+						options.logContext,
 						session,
 						`${options.card}@latest`,
 				  ),
 
 			action: this.jellyfish.getCardBySlug<ActionContract>(
-				options.context,
+				options.logContext,
 				session,
 				options.action,
 			),
 			session: this.jellyfish.getCardById<SessionContract>(
-				options.context,
+				options.logContext,
 				session,
 				session,
 			),
 		});
 
 		assert.INTERNAL(
-			options.context,
+			options.logContext,
 			cards.session,
 			errors.QueueInvalidSession,
 			`No such session: ${session}`,
 		);
 		assert.USER(
-			options.context,
+			options.logContext,
 			cards.action,
 			errors.QueueInvalidAction,
 			`No such action: ${options.action}`,
 		);
 		assert.USER(
-			options.context,
+			options.logContext,
 			cards.target,
 			errors.QueueInvalidRequest,
 			`No such input card: ${options.card}`,
@@ -178,7 +217,7 @@ export class Producer implements QueueProducer {
 		// Use the Queue's session instead of the session passed as a parameter as the
 		// passed session shouldn't have permissions to create action requests
 		return this.jellyfish.insertCard<ActionRequestContract>(
-			options.context,
+			options.logContext,
 			this.session,
 			{
 				type: 'action-request@1.0.0',
@@ -186,7 +225,7 @@ export class Producer implements QueueProducer {
 				data: {
 					epoch: date.valueOf(),
 					timestamp: date.toISOString(),
-					context: options.context,
+					context: options.logContext,
 					originator: options.originator,
 					actor: cards.session!.data.actor,
 					action: `${cards.action!.slug}@${cards.action!.version}`,
@@ -212,7 +251,7 @@ export class Producer implements QueueProducer {
 	 * @param {Object} options.arguments - action arguments
 	 * @param {Date} [options.currentDate] - current date
 	 * @param {String} [options.originator] - card id that originated this action
-	 * @param {Context} [options.context] - execution context
+	 * @param {LogContext} [options.logContext] - log context
 	 * @returns {Promise<ActionRequestContract>} action request
 	 */
 	async enqueue(
@@ -222,7 +261,7 @@ export class Producer implements QueueProducer {
 	): Promise<ActionRequestContract> {
 		const request = await this.storeRequest(actor, session, options);
 
-		logger.info(options.context, 'Enqueueing request', {
+		logger.info(options.logContext, 'Enqueueing request', {
 			actor,
 			request: {
 				slug: request.slug,
@@ -231,7 +270,7 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		await this.jellyfish.backend.connection.any({
+		await this.jellyfish.backend.connection!.any({
 			name: 'enqueue-action-request',
 			text: "SELECT graphile_worker.add_job('actionRequest', $1);",
 			values: [request],
@@ -245,15 +284,15 @@ export class Producer implements QueueProducer {
 	 * @function
 	 * @public
 	 *
-	 * @param {Context} context - execution context
+	 * @param {LogContext} logContext - log context
 	 * @param {ActionRequestContract} actionRequest - action request
 	 * @returns {Promise<ProducerResults>} results
 	 */
 	async waitResults(
-		context: Context,
+		logContext: LogContext,
 		actionRequest: ActionRequestContract,
 	): Promise<ProducerResults> {
-		logger.info(context, 'Waiting request results', {
+		logger.info(logContext, 'Waiting request results', {
 			request: {
 				id: actionRequest.id,
 				slug: actionRequest.slug,
@@ -264,12 +303,17 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		const request = await events.wait(context, this.jellyfish, this.session, {
-			id: actionRequest.id,
-			actor: actionRequest.data.actor,
-		});
+		const request = await events.wait(
+			logContext,
+			this.jellyfish,
+			this.session,
+			{
+				id: actionRequest.id,
+				actor: actionRequest.data.actor,
+			},
+		);
 
-		logger.info(context, 'Got request results', {
+		logger.info(logContext, 'Got request results', {
 			request: {
 				id: actionRequest.id,
 				slug: actionRequest.slug,
@@ -287,7 +331,7 @@ export class Producer implements QueueProducer {
 			),
 		);
 		assert.INTERNAL(
-			context,
+			logContext,
 			request.data.payload,
 			errors.QueueInvalidRequest,
 			() => {
@@ -311,16 +355,16 @@ export class Producer implements QueueProducer {
 	 * @function
 	 * @public
 	 *
-	 * @param {Context} context - execution context
+	 * @param {LogContext} logContext - log context
 	 * @param {String} originator - originator card id
 	 * @returns {Promise<ExecuteContract | null>} last execution event
 	 */
 	async getLastExecutionEvent(
-		context: Context,
+		logContext: LogContext,
 		originator: string,
 	): Promise<ExecuteContract | null> {
 		return events.getLastExecutionEvent(
-			context,
+			logContext,
 			this.jellyfish,
 			this.session,
 			originator,

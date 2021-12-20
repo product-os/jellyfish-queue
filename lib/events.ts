@@ -1,12 +1,11 @@
-import { getLogger } from '@balena/jellyfish-logger';
-import { JellyfishKernel, Context } from '@balena/jellyfish-types/build/core';
-import type { JSONSchema } from '@balena/jellyfish-types';
-import type {
+import { CoreKernel } from '@balena/jellyfish-core';
+import { getLogger, LogContext } from '@balena/jellyfish-logger';
+import { JSONSchema } from '@balena/jellyfish-types';
+import {
 	ExecuteContract,
 	ExecuteContractDefinition,
-	PostResults,
-	PostOptions,
 } from '@balena/jellyfish-types/build/queue';
+import { PostResults, PostOptions } from './consumer';
 
 const logger = getLogger(__filename);
 
@@ -45,7 +44,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  * @function
  * @public
  *
- * @param {Context} context - execution context
+ * @param {LogContext} logContext - log context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {Object} options - options
@@ -77,8 +76,8 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  * console.log(card.id)
  */
 export const post = async (
-	context: Context,
-	jellyfish: JellyfishKernel,
+	logContext: LogContext,
+	jellyfish: CoreKernel,
 	session: string,
 	options: PostOptions,
 	results: PostResults,
@@ -115,7 +114,7 @@ export const post = async (
 		contents.data.originator = options.originator;
 	}
 
-	return jellyfish.insertCard<ExecuteContract>(context, session, contents);
+	return jellyfish.insertCard<ExecuteContract>(logContext, session, contents);
 };
 
 /**
@@ -123,7 +122,7 @@ export const post = async (
  * @function
  * @public
  *
- * @param {Context} context - execution context
+ * @param {LogContext} logContext - log context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {String} originator - originator card id
@@ -138,13 +137,13 @@ export const post = async (
  * }
  */
 export const getLastExecutionEvent = async (
-	context: Context,
-	jellyfish: JellyfishKernel,
+	logContext: LogContext,
+	jellyfish: CoreKernel,
 	session: string,
 	originator: string,
 ): Promise<any> => {
 	const events = await jellyfish.query(
-		context,
+		logContext,
 		session,
 		{
 			type: 'object',
@@ -193,7 +192,7 @@ export interface WaitOptions {
  * @function
  * @public
  *
- * @param {Context} context - execution context
+ * @param {LogContext} logContext - log context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
  * @param {Object} options - options
@@ -211,8 +210,8 @@ export interface WaitOptions {
  * console.log(card.id)
  */
 export const wait = async (
-	context: Context,
-	jellyfish: JellyfishKernel,
+	logContext: LogContext,
+	jellyfish: CoreKernel,
 	session: string,
 	options: WaitOptions,
 ): Promise<ExecuteContract> => {
@@ -250,15 +249,15 @@ export const wait = async (
 
 	let result: ExecuteContract;
 
-	const stream = await jellyfish.stream(context, session, schema);
-	logger.info(context, 'Wait stream opened', {
+	const stream = await jellyfish.stream(logContext, session, schema);
+	logger.info(logContext, 'Wait stream opened', {
 		slug,
 	});
 
 	stream.once('data', (change) => {
 		result = change.after;
 
-		logger.info(context, 'Found results using stream', {
+		logger.info(logContext, 'Found results using stream', {
 			slug: result?.slug,
 			data: Object.keys(result?.data || {}),
 		});
@@ -269,13 +268,13 @@ export const wait = async (
 	return new Promise((resolve, reject) => {
 		stream.once('error', (error) => {
 			stream.removeAllListeners();
-			logger.exception(context, 'Wait stream error', error);
+			logger.exception(logContext, 'Wait stream error', error);
 			reject(error);
 		});
 
 		stream.once('closed', () => {
 			stream.removeAllListeners();
-			logger.info(context, 'Closing wait stream', {
+			logger.info(logContext, 'Closing wait stream', {
 				slug,
 			});
 
@@ -288,13 +287,13 @@ export const wait = async (
 		}
 
 		jellyfish
-			.getCardBySlug(context, session, `${slug}@${EXECUTION_EVENT_VERSION}`)
+			.getCardBySlug(logContext, session, `${slug}@${EXECUTION_EVENT_VERSION}`)
 			.then((card) => {
 				if (!card) {
 					return;
 				}
 
-				logger.info(context, 'Found results on first slug query', {
+				logger.info(logContext, 'Found results on first slug query', {
 					slug: card.slug,
 					data: Object.keys(card.data),
 				});
