@@ -18,7 +18,7 @@ describe('events', () => {
 		test('should insert an active execute card', async () => {
 			const id = context.generateRandomID();
 			const event = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -37,7 +37,7 @@ describe('events', () => {
 			);
 
 			const card = await context.kernel.getCardById(
-				context.context,
+				context.logContext,
 				context.session,
 				event.id,
 			);
@@ -50,7 +50,7 @@ describe('events', () => {
 			const id = context.generateRandomID();
 
 			const card = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -74,7 +74,7 @@ describe('events', () => {
 		test('should not use a passed id', async () => {
 			const id = context.generateRandomID();
 			const card = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -99,7 +99,7 @@ describe('events', () => {
 			const id = context.generateRandomID();
 			await expect(() => {
 				return events.post(
-					context.context,
+					context.logContext,
 					context.kernel,
 					context.session,
 					{
@@ -121,7 +121,7 @@ describe('events', () => {
 		test('should use the passed timestamp in the payload', async () => {
 			const id = context.generateRandomID();
 			const card = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -145,7 +145,7 @@ describe('events', () => {
 
 		test('should allow an object result', async () => {
 			const card = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -173,7 +173,7 @@ describe('events', () => {
 		test('should return when a certain execute event is inserted', (done) => {
 			const id = context.generateRandomID();
 			events
-				.wait(context.context, context.kernel, context.session, {
+				.wait(context.logContext, context.kernel, context.session, {
 					id,
 					action: '57692206-8da2-46e1-91c9-159b2c6928ef',
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
@@ -194,7 +194,7 @@ describe('events', () => {
 			setTimeout(() => {
 				try {
 					return events.post(
-						context.context,
+						context.logContext,
 						context.kernel,
 						context.session,
 						{
@@ -220,7 +220,7 @@ describe('events', () => {
 		test('should return if the card already exists', async () => {
 			const id = context.generateRandomID();
 			await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -239,7 +239,7 @@ describe('events', () => {
 			);
 
 			const card = await events.wait(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -264,7 +264,7 @@ describe('events', () => {
 			const BIG_EXECUTE_CARD = require('./big-execute.json');
 
 			events
-				.wait(context.context, context.kernel, context.session, {
+				.wait(context.logContext, context.kernel, context.session, {
 					id: BIG_EXECUTE_CARD.slug.replace(/^execute-/g, ''),
 					action: BIG_EXECUTE_CARD.data.action,
 					card: BIG_EXECUTE_CARD.data.target,
@@ -279,11 +279,10 @@ describe('events', () => {
 
 			setTimeout(() => {
 				try {
-					// Use the backend class directly so we can inject "links"
-					context.backend
-						.insertElement(context.context, BIG_EXECUTE_CARD)
+					context.kernel
+						.insertCard(context.logContext, context.session, BIG_EXECUTE_CARD)
 						.then((execute) => {
-							expect(omit(execute, ['id'])).toEqual(
+							expect(omit(execute, ['id', 'loop'])).toEqual(
 								Object.assign({}, BIG_EXECUTE_CARD, {
 									created_at: execute.created_at,
 									linked_at: execute.linked_at,
@@ -300,7 +299,7 @@ describe('events', () => {
 		test('should be able to access the event payload', async () => {
 			const id = context.generateRandomID();
 			await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -317,7 +316,7 @@ describe('events', () => {
 			);
 
 			const card = await events.wait(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -343,7 +342,7 @@ describe('events', () => {
 
 			const id1 = context.generateRandomID();
 			events
-				.wait(context.context, context.kernel, context.session, {
+				.wait(context.logContext, context.kernel, context.session, {
 					id: id1,
 					action: '57692206-8da2-46e1-91c9-159b2c6928ef',
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
@@ -362,7 +361,7 @@ describe('events', () => {
 			setTimeout(async () => {
 				try {
 					await events.post(
-						context.context,
+						context.logContext,
 						context.kernel,
 						context.session,
 						{
@@ -381,7 +380,7 @@ describe('events', () => {
 					);
 
 					await events.post(
-						context.context,
+						context.logContext,
 						context.kernel,
 						context.session,
 						{
@@ -400,7 +399,7 @@ describe('events', () => {
 					);
 
 					await events.post(
-						context.context,
+						context.logContext,
 						context.kernel,
 						context.session,
 						{
@@ -428,7 +427,7 @@ describe('events', () => {
 		test('should return the last execution event given one event', async () => {
 			const id = context.generateRandomID();
 			const card = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -446,7 +445,7 @@ describe('events', () => {
 			);
 
 			const event = await events.getLastExecutionEvent(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				'cb3523c5-b37d-41c8-ae32-9e7cc9309165',
@@ -481,7 +480,7 @@ describe('events', () => {
 			const originator = context.generateRandomID();
 
 			const card1 = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -501,7 +500,7 @@ describe('events', () => {
 			);
 
 			await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -521,7 +520,7 @@ describe('events', () => {
 			);
 
 			const event = await events.getLastExecutionEvent(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				originator,
@@ -556,7 +555,7 @@ describe('events', () => {
 			const originator = context.generateRandomID();
 
 			const card1 = await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -576,7 +575,7 @@ describe('events', () => {
 			);
 
 			await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -596,7 +595,7 @@ describe('events', () => {
 			);
 
 			const event = await events.getLastExecutionEvent(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				originator,
@@ -630,7 +629,7 @@ describe('events', () => {
 
 		test('should return null given no matching event', async () => {
 			await events.post(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				{
@@ -650,7 +649,7 @@ describe('events', () => {
 			);
 
 			const event = await events.getLastExecutionEvent(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				context.generateRandomID(),
@@ -660,7 +659,7 @@ describe('events', () => {
 
 		test('should only consider execute cards', async () => {
 			const id = context.generateRandomID();
-			await context.kernel.insertCard(context.context, context.session, {
+			await context.kernel.insertCard(context.logContext, context.session, {
 				type: 'card@1.0.0',
 				slug: context.generateRandomID(),
 				version: '1.0.0',
@@ -679,7 +678,7 @@ describe('events', () => {
 			});
 
 			const event = await events.getLastExecutionEvent(
-				context.context,
+				context.logContext,
 				context.kernel,
 				context.session,
 				id,

@@ -1,24 +1,17 @@
-import * as _ from 'lodash';
-import * as events from './events';
-import * as graphileWorker from 'graphile-worker';
-import { Logger } from '@graphile/logger';
-import { getLogger } from '@balena/jellyfish-logger';
-import { contracts } from './contracts';
+import { CoreKernel } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
+import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';
 import {
 	ActionRequestContract,
-	Context,
-	JellyfishKernel,
 	LinkContract,
 } from '@balena/jellyfish-types/build/core';
-import { core } from '@balena/jellyfish-types';
-import {
-	PostResults,
-	OnMessageEventHandler,
-	QueueConsumer,
-	ExecuteContract,
-} from '@balena/jellyfish-types/build/queue';
+import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
+import { Logger } from '@graphile/logger';
+import * as graphileWorker from 'graphile-worker';
+import * as _ from 'lodash';
+import { contracts } from './contracts';
+import * as events from './events';
 
 const logger = getLogger(__filename);
 
@@ -32,18 +25,60 @@ const EXECUTE_LINK_VERSION = '1.0.0';
 const RUN_RETRIES = 10;
 const RUN_RETRY_DELAY = 1000;
 
+declare type OnMessageEventHandler = (
+	payload: ActionRequestContract,
+) => Promise<void>;
+
+export interface QueueConsumer {
+	initializeWithEventHandler: (
+		logContext: LogContext,
+		onMessageEventHandler: OnMessageEventHandler,
+	) => Promise<void>;
+	run: (
+		logContext: LogContext,
+		onMessageEventHandler: OnMessageEventHandler,
+		retries?: number,
+	) => Promise<boolean>;
+	cancel: () => Promise<void>;
+	postResults: (
+		actor: string,
+		logContext: LogContext,
+		actionRequest: ActionRequestContract,
+		results: PostResults,
+	) => Promise<ExecuteContract>;
+}
+
+export interface PostResults {
+	data:
+		| string
+		| {
+				originator?: string;
+				[key: string]: any;
+		  };
+	error: boolean;
+}
+
+export interface PostOptions {
+	id: string;
+	actor: string;
+	action: string;
+	timestamp: string;
+	card: string;
+	originator?: string;
+}
+
 const getExecuteLinkSlug = (actionRequest: ActionRequestContract): string => {
 	return `link-execute-${actionRequest.slug}`;
 };
 
 const linkExecuteEvent = async (
-	jellyfish: JellyfishKernel,
-	context: Context,
+	jellyfish: CoreKernel,
+	logContext: LogContext,
 	session: string,
 	eventCard: ExecuteContract,
 	actionRequest: ActionRequestContract,
 ): Promise<LinkContract> => {
-	return jellyfish.insertCard<LinkContract>(context, session, {
+	return jellyfish.insertCard<LinkContract>(logContext, session, {
 		slug: getExecuteLinkSlug(actionRequest),
 		type: 'link@1.0.0',
 		version: EXECUTE_LINK_VERSION,
@@ -66,32 +101,32 @@ export class Consumer implements QueueConsumer {
 	messagesBeingHandled: number = 0;
 	graphileRunner: graphileWorker.Runner | null = null;
 
-	constructor(private jellyfish: JellyfishKernel, private session: string) {}
+	constructor(private jellyfish: CoreKernel, private session: string) {}
 
 	async initializeWithEventHandler(
-		context: Context,
+		logContext: LogContext,
 		onMessageEventHandler: OnMessageEventHandler,
 	): Promise<void> {
-		logger.info(context, 'Inserting essential cards');
+		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.jellyfish.replaceCard(context, this.session, card);
+				return this.jellyfish.replaceCard(logContext, this.session, card);
 			}),
 		);
 
-		await this.run(context, onMessageEventHandler);
+		await this.run(logContext, onMessageEventHandler);
 		this.graphileRunner!.stop = _.once(this.graphileRunner!.stop);
 	}
 
 	async run(
-		context: Context,
+		logContext: LogContext,
 		onMessageEventHandler: OnMessageEventHandler,
 		retries: number = RUN_RETRIES,
 	): Promise<boolean> {
 		try {
 			this.graphileRunner = await graphileWorker.run({
 				noHandleSignals: true,
-				pgPool: this.jellyfish.backend.connection.$pool,
+				pgPool: this.jellyfish.backend.connection!.$pool as any,
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
 				logger: new Logger((_scope) => {
@@ -100,29 +135,33 @@ export class Consumer implements QueueConsumer {
 				taskList: {
 					actionRequest: async (result) => {
 						// TS-TODO: Update graphile types to support Task list type parmaeterisation so we don't need to cast
-						const payload = result as core.ActionRequestContract;
+						const payload = result as ActionRequestContract;
 						const action = payload.data.action.split('@')[0];
 						try {
 							this.messagesBeingHandled++;
-							metrics.markJobAdd(action, context.id);
+							metrics.markJobAdd(action, logContext.id);
 							await onMessageEventHandler(payload);
 						} finally {
 							this.messagesBeingHandled--;
-							metrics.markJobDone(action, context.id, payload.data.timestamp);
+							metrics.markJobDone(
+								action,
+								logContext.id,
+								payload.data.timestamp,
+							);
 						}
 					},
 				},
 			});
 		} catch (error) {
 			if (retries > 0) {
-				logger.info(context, 'Graphile worker failed to run', {
+				logger.info(logContext, 'Graphile worker failed to run', {
 					retries,
 					error,
 				});
 				await new Promise((resolve) => {
 					setTimeout(resolve, RUN_RETRY_DELAY);
 				});
-				return this.run(context, onMessageEventHandler, retries - 1);
+				return this.run(logContext, onMessageEventHandler, retries - 1);
 			}
 			throw error;
 		}
@@ -147,7 +186,7 @@ export class Consumer implements QueueConsumer {
 	 * @public
 	 *
 	 * @param {String} actor - actor. TS-TODO - this parameter is currently unused.
-	 * @param {Context} context - execution context
+	 * @param {LogContext} logContext - log context
 	 * @param {ActionRequestContract} actionRequest - action request
 	 * @param {PostResults} results - action results
 	 * @param {Boolean} results.error - whether the result is an error
@@ -156,12 +195,12 @@ export class Consumer implements QueueConsumer {
 	 */
 	async postResults(
 		_actor: string,
-		context: Context,
+		logContext: LogContext,
 		actionRequest: ActionRequestContract,
 		results: PostResults,
 	): Promise<ExecuteContract> {
 		const eventCard = await events.post(
-			context,
+			logContext,
 			this.jellyfish,
 			this.session,
 			{
@@ -177,7 +216,7 @@ export class Consumer implements QueueConsumer {
 
 		await linkExecuteEvent(
 			this.jellyfish,
-			context,
+			logContext,
 			this.session,
 			eventCard,
 			actionRequest,

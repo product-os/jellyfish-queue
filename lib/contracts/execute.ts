@@ -1,5 +1,7 @@
-import type { ContractDefinition } from '@balena/jellyfish-types/build/core';
-import { TypeData } from '@balena/jellyfish-types/build/core';
+import {
+	ContractDefinition,
+	TypeData,
+} from '@balena/jellyfish-types/build/core';
 
 export const execute: ContractDefinition<TypeData> = {
 	slug: 'execute',

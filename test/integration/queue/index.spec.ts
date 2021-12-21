@@ -4,8 +4,8 @@ import {
 	Contract,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import type { ProducerOptions } from '@balena/jellyfish-types/build/queue';
-import { errors } from '../../../lib';
+import { ProducerOptions } from '../../../lib/producer';
+import * as errors from '../../../lib/errors';
 import * as helpers from './helpers';
 
 let context: helpers.IntegrationTestContext;
@@ -22,12 +22,12 @@ describe('queue', () => {
 	describe('.enqueue()', () => {
 		test('should include the actor from the passed session', async () => {
 			const typeCard = (await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			)) as Contract;
 			const session = await context.kernel.getCardById<SessionContract>(
-				context.context,
+				context.logContext,
 				context.session,
 				context.session,
 			);
@@ -37,7 +37,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					arguments: {
@@ -59,12 +59,12 @@ describe('queue', () => {
 
 		test('should include the whole passed action', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
 			const actionCard = await context.kernel.getCardBySlug<ActionContract>(
-				context.context,
+				context.logContext,
 				context.session,
 				'action-create-card@latest',
 			);
@@ -73,7 +73,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					arguments: {
@@ -97,7 +97,7 @@ describe('queue', () => {
 
 		test('should set an originator', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -106,7 +106,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					originator: '4a962ad9-20b5-4dd8-a707-bf819593cc84',
@@ -128,7 +128,7 @@ describe('queue', () => {
 
 		test('should take a current date', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -139,7 +139,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					currentDate: date,
@@ -174,7 +174,7 @@ describe('queue', () => {
 		test('should set a present timestamp', async () => {
 			const currentDate = new Date();
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -183,7 +183,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					arguments: {
@@ -210,7 +210,7 @@ describe('queue', () => {
 					context.session,
 					{
 						action: 'action-create-card@1.0.0',
-						context: context.context,
+						logContext: context.logContext,
 						card: 'foo-bar-baz-qux',
 						type: 'type',
 						arguments: {
@@ -229,7 +229,7 @@ describe('queue', () => {
 
 		test('should throw if the action was not found', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -239,7 +239,7 @@ describe('queue', () => {
 					context.session,
 					{
 						action: 'action-foo-bar@1.0.0',
-						context: context.context,
+						logContext: context.logContext,
 						card: typeCard!.id,
 						type: typeCard!.type,
 						arguments: {
@@ -258,7 +258,7 @@ describe('queue', () => {
 
 		test('should throw if the session was not found', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -266,7 +266,7 @@ describe('queue', () => {
 			expect(() => {
 				return context.queue.producer.enqueue(context.queueActor, id, {
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					arguments: {
@@ -291,7 +291,7 @@ describe('queue', () => {
 
 		test('should not let the same owner take a request twice', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -300,7 +300,7 @@ describe('queue', () => {
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
-					context: context.context,
+					logContext: context.logContext,
 					card: typeCard!.id,
 					type: typeCard!.type,
 					arguments: {
@@ -326,7 +326,7 @@ describe('queue', () => {
 
 		test('should cope with link materialization failures', async () => {
 			const typeCard = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				'card@latest',
 			);
@@ -334,7 +334,7 @@ describe('queue', () => {
 
 			const producerOptions: ProducerOptions = {
 				action: 'action-create-card@1.0.0',
-				context: context.context,
+				logContext: context.logContext,
 				card: typeCard!.id,
 				type: typeCard!.type,
 				arguments: {
@@ -360,8 +360,8 @@ describe('queue', () => {
 
 			await context.queue.consumer.postResults(
 				context.queueActor,
-				context.context,
-				actionRequest,
+				context.logContext,
+				actionRequest as any,
 				{
 					error: false,
 					data: {
@@ -371,15 +371,16 @@ describe('queue', () => {
 			);
 
 			// Simulate non-materialized links
-			await context.backend.upsertElement(
-				context.context,
+			await context.kernel.replaceCard(
+				context.logContext,
+				context.session,
 				Object.assign({}, enqueued, {
 					links: {},
 				}),
 			);
 
 			const currentRequest = await context.kernel.getCardBySlug(
-				context.context,
+				context.logContext,
 				context.session,
 				`${enqueued.slug}@${enqueued.version}`,
 			);
