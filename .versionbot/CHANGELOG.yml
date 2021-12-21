@@ -1,4 +1,21 @@
 - commits:
+    - subject: Update the logger and the core
+      hash: 34afc83b38698466e0f0fdc49b74072294d1f332
+      body: |
+        Update these modules requires some manual chages. Also restrict the
+        usage of `jellyfish-types` to general contract types.
+      footer:
+        Connects-to: 'https://github.com/product-os/jellyfish-types/issues/336'
+        connects-to: 'https://github.com/product-os/jellyfish-types/issues/336'
+        Change-type: major
+        change-type: major
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.0.0
+  date: 2021-12-21T19:27:03.062Z
+- commits:
     - subject: Update wait() return type
       hash: e908d049b853bf8ee8c203c5dba0f1a94d67b0b1
       body: ''
