@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update external-non-major'
+      hash: f84b6e2a7fde48d860674250ba7da04250402e53
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.1
+  date: 2021-12-21T19:37:16.728Z
+- commits:
     - subject: Update the logger and the core
       hash: 34afc83b38698466e0f0fdc49b74072294d1f332
       body: |
