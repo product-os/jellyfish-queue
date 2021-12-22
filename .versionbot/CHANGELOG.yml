@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update peer dependencies to match main dependencies
+      hash: fed35f22b0da430c2fab6c997a952795415b235f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.0.2
+  date: 2021-12-22T11:53:53.258Z
+- commits:
     - subject: 'patch: Update external-non-major'
       hash: f84b6e2a7fde48d860674250ba7da04250402e53
       body: ''
