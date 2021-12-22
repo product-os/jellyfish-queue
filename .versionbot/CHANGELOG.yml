@@ -1,4 +1,17 @@
 - commits:
+    - subject: Export `ProducerResults`
+      hash: e9e17a2a93242091a6c9d42533bae57bb3bb119e
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.1.0
+  date: 2021-12-22T22:25:41.547Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^10.2.0'
       hash: 48dd7032274790dddf9e0be22ad829c223c4352e
       body: |
