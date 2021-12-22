@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update internal-patch'
+      hash: 17a1737379c7e31a8344b9387b96a3368cbbef0a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.4
+  date: 2021-12-22T17:34:24.723Z
+- commits:
     - subject: Revert the reordering in v2.0.0 in `lib/errors.ts`
       hash: a7bebe419aabcba2eb93d2efaaa05698ecd964e0
       body: |
