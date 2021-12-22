@@ -1,4 +1,19 @@
 - commits:
+    - subject: Revert the reordering in v2.0.0 in `lib/errors.ts`
+      hash: a7bebe419aabcba2eb93d2efaaa05698ecd964e0
+      body: |
+        Desperate attempt to fix the problem in this PR:
+        https://github.com/product-os/jellyfish-action-library/pull/1454
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.0.3
+  date: 2021-12-22T17:25:43.162Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to v10'
       hash: ab8e4aca3c30eb985cee050bf7837bdf31116e1a
       body: |
