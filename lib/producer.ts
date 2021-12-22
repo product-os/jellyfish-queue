@@ -32,7 +32,7 @@ export interface ProducerOptions {
 	schedule?: string;
 }
 
-interface ProducerResults {
+export interface ProducerResults {
 	error: boolean;
 	timestamp: string;
 	data: ExecuteContract['data']['payload']['data'];
