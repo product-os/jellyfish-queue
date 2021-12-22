@@ -29,6 +29,11 @@ const logger = getLogger(__filename);
 const GRAPHILE_RETRIES = 10;
 const GRAPHILE_RETRY_DELAY = 1000;
 
+export interface ProducerOptionsSchedule {
+	contract: string;
+	runAt: Date;
+}
+
 export interface ProducerOptions {
 	logContext: LogContext;
 	action: string;
@@ -37,7 +42,7 @@ export interface ProducerOptions {
 	arguments: ContractData;
 	currentDate?: Date;
 	originator?: string;
-	schedule?: string;
+	schedule?: ProducerOptionsSchedule;
 }
 
 export interface ProducerResults {
@@ -66,11 +71,7 @@ export interface QueueProducer {
 		logContext: LogContext,
 		originator: string,
 	) => Promise<ExecuteContract | null>;
-	getNextExecutionDateTime?: (
-		logContext: LogContext,
-		session: string,
-		scheduledActionId: string,
-	) => Promise<string | null>;
+	deleteJob: (context: LogContext, key: string) => Promise<void>;
 }
 
 async function props(obj: any) {
@@ -228,7 +229,7 @@ export class Producer implements QueueProducer {
 
 		// Use the Queue's session instead of the session passed as a parameter as the
 		// passed session shouldn't have permissions to create action requests
-		return this.kernel.insertCard<ActionRequestContract>(
+		return this.kernel.insertContract<ActionRequestContract>(
 			options.logContext,
 			this.session,
 			{
@@ -245,6 +246,9 @@ export class Producer implements QueueProducer {
 						id: cards.target!.id,
 					},
 					arguments: options.arguments,
+					schedule: options.schedule?.contract,
+					card: options.card,
+					type: options.type,
 				},
 			},
 		);
@@ -273,6 +277,17 @@ export class Producer implements QueueProducer {
 	): Promise<ActionRequestContract> {
 		const request = await this.storeRequest(actor, session, options);
 
+		let jobName = 'enqueue-action-request';
+		const jobParameters: string[] = [`'actionRequest'`, '$1'];
+		const values: any[] = [request];
+
+		// Handle scheduled actions
+		if (options.schedule) {
+			jobName = `enqueue-action-request-${uuidv4()}`;
+			jobParameters.push('run_at := $2', 'job_key := $3');
+			values.push(options.schedule.runAt, options.schedule.contract);
+		}
+
 		logger.info(options.logContext, 'Enqueueing request', {
 			actor,
 			request: {
@@ -283,9 +298,9 @@ export class Producer implements QueueProducer {
 		});
 
 		await this.pool.query({
-			name: 'enqueue-action-request',
-			text: "SELECT graphile_worker.add_job('actionRequest', $1);",
-			values: [request],
+			name: jobName,
+			text: `SELECT graphile_worker.add_job(${jobParameters.join(',')});`,
+			values,
 		});
 
 		return request;
@@ -376,5 +391,21 @@ export class Producer implements QueueProducer {
 			this.session,
 			originator,
 		);
+	}
+
+	/**
+	 * @summary Delete a job from the queue using its job key
+	 * @param {Context} context - execution context
+	 * @param {String} key - job key to delete
+	 */
+	async deleteJob(context: LogContext, key: string): Promise<void> {
+		logger.debug(context, 'Deleting job from queue', {
+			key,
+		});
+
+		await this.pool.query({
+			text: `SELECT graphile_worker.remove_job($1);`,
+			values: [key],
+		});
 	}
 }

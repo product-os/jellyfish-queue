@@ -42,6 +42,7 @@ export interface ActionRequestData {
 	};
 	timestamp: string;
 	originator?: string;
+	schedule?: string;
 	[k: string]: unknown;
 }
 
