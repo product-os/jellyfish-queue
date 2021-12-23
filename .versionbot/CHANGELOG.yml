@@ -1,4 +1,17 @@
 - commits:
+    - subject: Export ProducerOptions
+      hash: fcb6361a1e8e4f24f2d0b5c70a1d6e4955a446e7
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 2.2.0
+  date: 2021-12-23T07:22:55.495Z
+- commits:
     - subject: Export `ProducerResults`
       hash: e9e17a2a93242091a6c9d42533bae57bb3bb119e
       body: ''
