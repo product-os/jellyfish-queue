@@ -1,11 +1,8 @@
-import { Kernel } from '@balena/jellyfish-core';
+import type { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
-import {
-	ExecuteContract,
-	ExecuteContractDefinition,
-} from '@balena/jellyfish-types/build/queue';
-import { JsonSchema } from '@balena/jellyfish-types';
-import { PostResults, PostOptions } from './consumer';
+import type { JsonSchema } from '@balena/jellyfish-types';
+import type { PostResults, PostOptions } from './consumer';
+import type { ExecuteContract, ExecuteContractDefinition } from './types';
 
 const logger = getLogger(__filename);
 
@@ -45,7 +42,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  * @public
  *
  * @param {LogContext} logContext - log context
- * @param {Object} jellyfish - jellyfish instance
+ * @param {Kernel} kernel - kernel instance
  * @param {String} session - session id
  * @param {Object} options - options
  * @param {String} options.id - request id
@@ -61,7 +58,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  *
  * @example
  * const session = '4a962ad9-20b5-4dd8-a707-bf819593cc84'
- * const card = await events.post({ ... }, jellyfish, session, {
+ * const card = await events.post({ ... }, kernel, session, {
  *   id: '414f2345-4f5e-4571-820f-28a49731733d',
  *   action: '57692206-8da2-46e1-91c9-159b2c6928ef',
  *   card: '033d9184-70b2-4ec9-bc39-9a249b186422',
@@ -77,7 +74,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  */
 export const post = async (
 	logContext: LogContext,
-	jellyfish: Kernel,
+	kernel: Kernel,
 	session: string,
 	options: PostOptions,
 	results: PostResults,
@@ -114,7 +111,7 @@ export const post = async (
 		contents.data.originator = options.originator;
 	}
 
-	return jellyfish.insertCard<ExecuteContract>(logContext, session, contents);
+	return kernel.insertCard<ExecuteContract>(logContext, session, contents);
 };
 
 /**
@@ -123,7 +120,7 @@ export const post = async (
  * @public
  *
  * @param {LogContext} logContext - log context
- * @param {Object} jellyfish - jellyfish instance
+ * @param {Kernel} kernel - kernel instance
  * @param {String} session - session id
  * @param {String} originator - originator card id
  * @returns {(Object|Null)} last execution event
@@ -131,18 +128,18 @@ export const post = async (
  * @example
  * const originator = '4a962ad9-20b5-4dd8-a707-bf819593cc84'
  *
- * const executeEvent = await events.getLastExecutionEvent({ ... }, jellyfish, session, originator)
+ * const executeEvent = await events.getLastExecutionEvent({ ... }, kernel, session, originator)
  * if (executeEvent) {
  *   console.log(executeEvent.data.timestamp)
  * }
  */
 export const getLastExecutionEvent = async (
 	logContext: LogContext,
-	jellyfish: Kernel,
+	kernel: Kernel,
 	session: string,
 	originator: string,
 ): Promise<any> => {
-	const events = await jellyfish.query(
+	const events = await kernel.query(
 		logContext,
 		session,
 		{
@@ -193,7 +190,7 @@ export interface WaitOptions {
  * @public
  *
  * @param {LogContext} logContext - log context
- * @param {Object} jellyfish - jellyfish instance
+ * @param {Kernel} kernel - kernel instance
  * @param {String} session - session id
  * @param {Object} options - options
  * @param {String} options.id - request id
@@ -202,7 +199,7 @@ export interface WaitOptions {
  *
  * @example
  * const session = '4a962ad9-20b5-4dd8-a707-bf819593cc84'
- * const card = await events.wait({ ... }, jellyfish, session, {
+ * const card = await events.wait({ ... }, kernel, session, {
  *   id: '4a962ad9-20b5-4dd8-a707-bf819593cc84',
  *   card: '033d9184-70b2-4ec9-bc39-9a249b186422'
  * })
@@ -211,7 +208,7 @@ export interface WaitOptions {
  */
 export const wait = async (
 	logContext: LogContext,
-	jellyfish: Kernel,
+	kernel: Kernel,
 	session: string,
 	options: WaitOptions,
 ): Promise<ExecuteContract> => {
@@ -249,7 +246,7 @@ export const wait = async (
 
 	let result: ExecuteContract;
 
-	const stream = await jellyfish.stream(logContext, session, schema);
+	const stream = await kernel.stream(logContext, session, schema);
 	logger.info(logContext, 'Wait stream opened', {
 		slug,
 	});
@@ -286,7 +283,7 @@ export const wait = async (
 			return;
 		}
 
-		jellyfish
+		kernel
 			.getCardBySlug(logContext, session, `${slug}@${EXECUTION_EVENT_VERSION}`)
 			.then((card) => {
 				if (!card) {

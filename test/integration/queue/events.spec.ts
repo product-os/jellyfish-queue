@@ -1,5 +1,5 @@
-import { strict as assert } from 'assert';
 import { testUtils as coreTestUtils } from '@balena/jellyfish-core';
+import { strict as assert } from 'assert';
 import { omit } from 'lodash';
 import { events, testUtils } from '../../../lib';
 

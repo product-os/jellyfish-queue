@@ -1,8 +1,8 @@
-import * as events from './events';
+import { getExecuteEventSlug } from './events';
 
 describe('getExecuteEventSlug', () => {
 	test('generates a valid slug', () => {
-		const eventSlug = events.getExecuteEventSlug({
+		const eventSlug = getExecuteEventSlug({
 			id: 'test',
 		});
 		expect(eventSlug).toBe('execute-test');

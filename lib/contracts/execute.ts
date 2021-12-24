@@ -1,4 +1,4 @@
-import {
+import type {
 	ContractDefinition,
 	TypeData,
 } from '@balena/jellyfish-types/build/core';
