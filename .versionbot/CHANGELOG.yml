@@ -1,4 +1,15 @@
 - commits:
+    - subject: Bump `jellyfish-core` and `jellyfish-types` and apply refactorings
+      hash: 3435a51d0aa2c66942da8615f29cc2b31d93233a
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: edufschmidt
+      nested: []
+  version: 2.3.0
+  date: 2021-12-27T19:58:25.064Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: bb10446bb877569cca779b530cfa96be0733a38f
       body: ''
