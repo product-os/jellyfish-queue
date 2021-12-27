@@ -1,10 +1,10 @@
-import { CoreKernel } from '@balena/jellyfish-core';
+import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
-import { JSONSchema } from '@balena/jellyfish-types';
 import {
 	ExecuteContract,
 	ExecuteContractDefinition,
 } from '@balena/jellyfish-types/build/queue';
+import { JsonSchema } from '@balena/jellyfish-types';
 import { PostResults, PostOptions } from './consumer';
 
 const logger = getLogger(__filename);
@@ -77,7 +77,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  */
 export const post = async (
 	logContext: LogContext,
-	jellyfish: CoreKernel,
+	jellyfish: Kernel,
 	session: string,
 	options: PostOptions,
 	results: PostResults,
@@ -138,7 +138,7 @@ export const post = async (
  */
 export const getLastExecutionEvent = async (
 	logContext: LogContext,
-	jellyfish: CoreKernel,
+	jellyfish: Kernel,
 	session: string,
 	originator: string,
 ): Promise<any> => {
@@ -211,12 +211,12 @@ export interface WaitOptions {
  */
 export const wait = async (
 	logContext: LogContext,
-	jellyfish: CoreKernel,
+	jellyfish: Kernel,
 	session: string,
 	options: WaitOptions,
 ): Promise<ExecuteContract> => {
 	const slug = `${EXECUTION_EVENT_TYPE}-${options.id}`;
-	const schema: JSONSchema = {
+	const schema: JsonSchema = {
 		type: 'object',
 		additionalProperties: true,
 		required: ['slug', 'active', 'type', 'data'],

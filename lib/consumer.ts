@@ -1,17 +1,17 @@
-import { CoreKernel } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';
+import { Logger } from '@graphile/logger';
+import * as graphileWorker from 'graphile-worker';
+import { once, noop } from 'lodash';
+import { contracts } from './contracts';
+import { Kernel } from '@balena/jellyfish-core';
 import {
 	ActionRequestContract,
 	LinkContract,
 } from '@balena/jellyfish-types/build/core';
 import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
-import { Logger } from '@graphile/logger';
-import * as graphileWorker from 'graphile-worker';
-import * as _ from 'lodash';
-import { contracts } from './contracts';
-import * as events from './events';
+import { post } from './events';
 
 const logger = getLogger(__filename);
 
@@ -72,7 +72,7 @@ const getExecuteLinkSlug = (actionRequest: ActionRequestContract): string => {
 };
 
 const linkExecuteEvent = async (
-	jellyfish: CoreKernel,
+	jellyfish: Kernel,
 	logContext: LogContext,
 	session: string,
 	eventCard: ExecuteContract,
@@ -101,7 +101,7 @@ export class Consumer implements QueueConsumer {
 	messagesBeingHandled: number = 0;
 	graphileRunner: graphileWorker.Runner | null = null;
 
-	constructor(private jellyfish: CoreKernel, private session: string) {}
+	constructor(private jellyfish: Kernel, private session: string) {}
 
 	async initializeWithEventHandler(
 		logContext: LogContext,
@@ -115,7 +115,7 @@ export class Consumer implements QueueConsumer {
 		);
 
 		await this.run(logContext, onMessageEventHandler);
-		this.graphileRunner!.stop = _.once(this.graphileRunner!.stop);
+		this.graphileRunner!.stop = once(this.graphileRunner!.stop);
 	}
 
 	async run(
@@ -130,7 +130,7 @@ export class Consumer implements QueueConsumer {
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
 				logger: new Logger((_scope) => {
-					return _.noop;
+					return noop;
 				}),
 				taskList: {
 					actionRequest: async (result) => {
@@ -199,7 +199,7 @@ export class Consumer implements QueueConsumer {
 		actionRequest: ActionRequestContract,
 		results: PostResults,
 	): Promise<ExecuteContract> {
-		const eventCard = await events.post(
+		const eventCard = await post(
 			logContext,
 			this.jellyfish,
 			this.session,

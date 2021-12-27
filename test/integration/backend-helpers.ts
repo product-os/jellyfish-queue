@@ -3,13 +3,12 @@ import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { LogContext } from '@balena/jellyfish-logger';
 import { v4 as uuidv4 } from 'uuid';
 import * as utils from './utils';
-import * as core from '@balena/jellyfish-core';
-import { CoreKernel, MemoryCache } from '@balena/jellyfish-core';
+import { Kernel, Cache } from '@balena/jellyfish-core';
 
 export interface BackendTestContext {
 	logContext: LogContext;
-	cache: MemoryCache;
-	kernel: CoreKernel;
+	cache: Cache;
+	kernel: Kernel;
 
 	generateRandomSlug: typeof utils.generateRandomSlug;
 	generateRandomID: typeof utils.generateRandomID;
@@ -20,13 +19,13 @@ export const before = async (): Promise<BackendTestContext> => {
 	const logContext = {
 		id: `CORE-TEST-${uuidv4()}`,
 	};
-	const cache = new MemoryCache(
+	const cache = new Cache(
 		Object.assign({}, defaultEnvironment.redis, {
 			namespace: dbName,
 		}),
 	);
 	await cache.connect();
-	const kernel = await core.create(
+	const kernel = await Kernel.withPostgres(
 		logContext,
 		cache,
 		Object.assign({}, defaultEnvironment.database.options, {
