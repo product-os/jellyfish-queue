@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update external-non-major'
+      hash: e6a7c06640064a95bc64aa7004f1bca8064929bd
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.3.1
+  date: 2021-12-27T21:21:03.635Z
+- commits:
     - subject: Bump `jellyfish-core` and `jellyfish-types` and apply refactorings
       hash: 3435a51d0aa2c66942da8615f29cc2b31d93233a
       body: ''
