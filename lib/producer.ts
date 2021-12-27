@@ -1,6 +1,6 @@
 import { strict as nativeAssert } from 'assert';
 import * as assert from '@balena/jellyfish-assert';
-import { CoreKernel } from '@balena/jellyfish-core';
+import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import {
 	ActionContract,
@@ -13,8 +13,13 @@ import * as graphileWorker from 'graphile-worker';
 import { v4 as isUUID } from 'is-uuid';
 import { v4 as uuidv4 } from 'uuid';
 import { contracts } from './contracts';
-import * as errors from './errors';
-import * as events from './events';
+import { getLastExecutionEvent, wait } from './events';
+import {
+	QueueInvalidSession,
+	QueueInvalidAction,
+	QueueInvalidRequest,
+	QueueNoRequest,
+} from './errors';
 
 const logger = getLogger(__filename);
 
@@ -84,7 +89,7 @@ async function props(obj: any) {
  */
 
 export class Producer implements QueueProducer {
-	constructor(private jellyfish: CoreKernel, private session: string) {}
+	constructor(private jellyfish: Kernel, private session: string) {}
 
 	/**
 	 * @summary Initialize the queue producer
@@ -196,19 +201,19 @@ export class Producer implements QueueProducer {
 		assert.INTERNAL(
 			options.logContext,
 			cards.session,
-			errors.QueueInvalidSession,
+			QueueInvalidSession,
 			`No such session: ${session}`,
 		);
 		assert.USER(
 			options.logContext,
 			cards.action,
-			errors.QueueInvalidAction,
+			QueueInvalidAction,
 			`No such action: ${options.action}`,
 		);
 		assert.USER(
 			options.logContext,
 			cards.target,
-			errors.QueueInvalidRequest,
+			QueueInvalidRequest,
 			`No such input card: ${options.card}`,
 		);
 
@@ -303,15 +308,10 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		const request = await events.wait(
-			logContext,
-			this.jellyfish,
-			this.session,
-			{
-				id: actionRequest.id,
-				actor: actionRequest.data.actor,
-			},
-		);
+		const request = await wait(logContext, this.jellyfish, this.session, {
+			id: actionRequest.id,
+			actor: actionRequest.data.actor,
+		});
 
 		logger.info(logContext, 'Got request results', {
 			request: {
@@ -326,14 +326,14 @@ export class Producer implements QueueProducer {
 
 		nativeAssert(
 			request,
-			new errors.QueueNoRequest(
+			new QueueNoRequest(
 				`Request not found: ${JSON.stringify(actionRequest, null, 2)}`,
 			),
 		);
 		assert.INTERNAL(
 			logContext,
 			request.data.payload,
-			errors.QueueInvalidRequest,
+			QueueInvalidRequest,
 			() => {
 				return `Execute event has no payload: ${JSON.stringify(
 					request,
@@ -363,7 +363,7 @@ export class Producer implements QueueProducer {
 		logContext: LogContext,
 		originator: string,
 	): Promise<ExecuteContract | null> {
-		return events.getLastExecutionEvent(
+		return getLastExecutionEvent(
 			logContext,
 			this.jellyfish,
 			this.session,
