@@ -1,4 +1,17 @@
 - commits:
+    - subject: Add missing `@types/uuid`
+      hash: 8ce0293bd3203f01ea04cdb810ed4731682e3022
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.4.1
+  date: 2021-12-28T14:47:37.524Z
+- commits:
     - subject: Export a `testUtils` module that extends the core's
       hash: f15b6eeaf941338f6d03356bc4f6e7966c59cc9b
       body: ''
