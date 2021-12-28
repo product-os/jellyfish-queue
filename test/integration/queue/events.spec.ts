@@ -1,22 +1,22 @@
 import { strict as assert } from 'assert';
+import { testUtils as coreTestUtils } from '@balena/jellyfish-core';
 import { omit } from 'lodash';
-import * as helpers from './helpers';
-import { events } from '../../../lib';
+import { events, testUtils } from '../../../lib';
 
-let context: helpers.IntegrationTestContext;
+let context: testUtils.TestContext;
 
 beforeAll(async () => {
-	context = await helpers.before();
+	context = await testUtils.newContext();
 });
 
 afterAll(async () => {
-	await helpers.after(context);
+	await testUtils.destroyContext(context);
 });
 
 describe('events', () => {
 	describe('.post()', () => {
 		test('should insert an active execute card', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			const event = await events.post(
 				context.logContext,
 				context.kernel,
@@ -47,7 +47,7 @@ describe('events', () => {
 
 		test('should set a present timestamp', async () => {
 			const currentDate = new Date();
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 
 			const card = await events.post(
 				context.logContext,
@@ -72,7 +72,7 @@ describe('events', () => {
 		});
 
 		test('should not use a passed id', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			const card = await events.post(
 				context.logContext,
 				context.kernel,
@@ -96,7 +96,7 @@ describe('events', () => {
 		});
 
 		test("should fail if the result doesn't contain an `error` field", async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			await expect(() => {
 				return events.post(
 					context.logContext,
@@ -119,7 +119,7 @@ describe('events', () => {
 		});
 
 		test('should use the passed timestamp in the payload', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			const card = await events.post(
 				context.logContext,
 				context.kernel,
@@ -149,7 +149,7 @@ describe('events', () => {
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: '57692206-8da2-46e1-91c9-159b2c6928ef',
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
@@ -171,7 +171,7 @@ describe('events', () => {
 
 	describe('.wait()', () => {
 		test('should return when a certain execute event is inserted', (done) => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			events
 				.wait(context.logContext, context.kernel, context.session, {
 					id,
@@ -218,7 +218,7 @@ describe('events', () => {
 		});
 
 		test('should return if the card already exists', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			await events.post(
 				context.logContext,
 				context.kernel,
@@ -297,7 +297,7 @@ describe('events', () => {
 		});
 
 		test('should be able to access the event payload', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			await events.post(
 				context.logContext,
 				context.kernel,
@@ -340,7 +340,7 @@ describe('events', () => {
 		test('should ignore cards that do not match the id', (done) => {
 			expect.assertions(1);
 
-			const id1 = context.generateRandomID();
+			const id1 = coreTestUtils.generateRandomId();
 			events
 				.wait(context.logContext, context.kernel, context.session, {
 					id: id1,
@@ -357,7 +357,7 @@ describe('events', () => {
 				})
 				.catch(done);
 
-			const id2 = context.generateRandomID();
+			const id2 = coreTestUtils.generateRandomId();
 			setTimeout(async () => {
 				try {
 					await events.post(
@@ -425,7 +425,7 @@ describe('events', () => {
 
 	describe('.getLastExecutionEvent', () => {
 		test('should return the last execution event given one event', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			const card = await events.post(
 				context.logContext,
 				context.kernel,
@@ -477,14 +477,14 @@ describe('events', () => {
 		});
 
 		test('should return the last event given a matching and non-matching event', async () => {
-			const originator = context.generateRandomID();
+			const originator = coreTestUtils.generateRandomId();
 
 			const card1 = await events.post(
 				context.logContext,
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: '57692206-8da2-46e1-91c9-159b2c6928ef',
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
@@ -494,7 +494,7 @@ describe('events', () => {
 				{
 					error: false,
 					data: {
-						id: context.generateRandomID(),
+						id: coreTestUtils.generateRandomId(),
 					},
 				},
 			);
@@ -504,7 +504,7 @@ describe('events', () => {
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
 					card: '5201aae8-c937-4f92-940d-827d857bbcc2',
 					actor: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
@@ -552,14 +552,14 @@ describe('events', () => {
 		});
 
 		test('should return the last execution event given two matching events', async () => {
-			const originator = context.generateRandomID();
+			const originator = coreTestUtils.generateRandomId();
 
 			const card1 = await events.post(
 				context.logContext,
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: '57692206-8da2-46e1-91c9-159b2c6928ef',
 					card: '033d9184-70b2-4ec9-bc39-9a249b186422',
 					actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
@@ -579,7 +579,7 @@ describe('events', () => {
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
 					card: '5201aae8-c937-4f92-940d-827d857bbcc2',
 					actor: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
@@ -633,7 +633,7 @@ describe('events', () => {
 				context.kernel,
 				context.session,
 				{
-					id: context.generateRandomID(),
+					id: coreTestUtils.generateRandomId(),
 					action: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
 					card: '5201aae8-c937-4f92-940d-827d857bbcc2',
 					actor: 'e4fe3f19-13ae-4421-b28f-6507af78d1f6',
@@ -652,16 +652,16 @@ describe('events', () => {
 				context.logContext,
 				context.kernel,
 				context.session,
-				context.generateRandomID(),
+				coreTestUtils.generateRandomId(),
 			);
 			expect(event).toBeNull();
 		});
 
 		test('should only consider execute cards', async () => {
-			const id = context.generateRandomID();
+			const id = coreTestUtils.generateRandomId();
 			await context.kernel.insertCard(context.logContext, context.session, {
 				type: 'card@1.0.0',
-				slug: context.generateRandomID(),
+				slug: coreTestUtils.generateRandomId(),
 				version: '1.0.0',
 				data: {
 					timestamp: '2018-06-30T19:34:42.829Z',

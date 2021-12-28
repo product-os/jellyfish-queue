@@ -4,18 +4,16 @@ import {
 	Contract,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import { ProducerOptions } from '../../../lib/producer';
-import * as errors from '../../../lib/errors';
-import * as helpers from './helpers';
+import { errors, ProducerOptions, testUtils } from '../../../lib';
 
-let context: helpers.IntegrationTestContext;
+let context: testUtils.TestContext;
 
 beforeAll(async () => {
-	context = await helpers.before();
+	context = await testUtils.newContext();
 });
 
 afterAll(async () => {
-	await helpers.after(context);
+	await testUtils.destroyContext(context);
 });
 
 describe('queue', () => {
@@ -33,7 +31,7 @@ describe('queue', () => {
 			);
 			expect(session).not.toBe(null);
 			await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -69,7 +67,7 @@ describe('queue', () => {
 				'action-create-card@latest',
 			);
 			await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -102,7 +100,7 @@ describe('queue', () => {
 				'card@latest',
 			);
 			await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -135,7 +133,7 @@ describe('queue', () => {
 			const date = new Date();
 
 			await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -179,7 +177,7 @@ describe('queue', () => {
 				'card@latest',
 			);
 			await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -206,7 +204,7 @@ describe('queue', () => {
 		test('should throw if the type is a slug and was not found', async () => {
 			expect(() => {
 				return context.queue.producer.enqueue(
-					context.queueActor,
+					context.queue.actor,
 					context.session,
 					{
 						action: 'action-create-card@1.0.0',
@@ -235,7 +233,7 @@ describe('queue', () => {
 			);
 			expect(() => {
 				return context.queue.producer.enqueue(
-					context.queueActor,
+					context.queue.actor,
 					context.session,
 					{
 						action: 'action-foo-bar@1.0.0',
@@ -264,7 +262,7 @@ describe('queue', () => {
 			);
 			const id = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 			expect(() => {
-				return context.queue.producer.enqueue(context.queueActor, id, {
+				return context.queue.producer.enqueue(context.queue.actor, id, {
 					action: 'action-create-card@1.0.0',
 					logContext: context.logContext,
 					card: typeCard!.id,
@@ -296,7 +294,7 @@ describe('queue', () => {
 				'card@latest',
 			);
 			const actionRequest = await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				{
 					action: 'action-create-card@1.0.0',
@@ -346,7 +344,7 @@ describe('queue', () => {
 			};
 
 			const enqueued = await context.queue.producer.enqueue(
-				context.queueActor,
+				context.queue.actor,
 				context.session,
 				producerOptions,
 			);
@@ -359,7 +357,7 @@ describe('queue', () => {
 			});
 
 			await context.queue.consumer.postResults(
-				context.queueActor,
+				context.queue.actor,
 				context.logContext,
 				actionRequest as any,
 				{
