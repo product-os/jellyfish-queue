@@ -1,4 +1,17 @@
 - commits:
+    - subject: Export a `testUtils` module that extends the core's
+      hash: f15b6eeaf941338f6d03356bc4f6e7966c59cc9b
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+  version: 2.4.0
+  date: 2021-12-28T14:37:50.200Z
+- commits:
     - subject: 'patch: Update external-non-major'
       hash: e6a7c06640064a95bc64aa7004f1bca8064929bd
       body: ''
