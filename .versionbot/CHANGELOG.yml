@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update README
+      hash: c946d41125e30255dfd04d5074e1bed5df00031d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: edufschmidt
+      nested: []
+  version: 2.4.2
+  date: 2021-12-29T16:30:30.093Z
+- commits:
     - subject: Add missing `@types/uuid`
       hash: 8ce0293bd3203f01ea04cdb810ed4731682e3022
       body: ''
