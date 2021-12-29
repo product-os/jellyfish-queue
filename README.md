@@ -1,30 +1,36 @@
 # Jellyfish Queue
 
-The Jellyfish system processes incoming action requests and adds them to a
-queue. The system can dequeue the next action request, execute it, and post the
-results back. This module provides a small set of functions to perform any
-action request queue-related operations.
+The Jellyfish system processes incoming action requests and adds them to a queue so that they can be retrieved and executed in order.
 
-No module that interacts with the action request queue should try to bypass
-this module.
+This module provides a small set of functions to perform any queue-related operations, and should be utilized by any module requiring interaction with queued objects.
 
+Note that, although `jellyfish-queue` is mostly used for enqueuing action requests, it could also be used to support handling other types of objects as well. 
+
+Under-the-hood, this module makes use of [`graphile-worker`](https://github.com/graphile/worker), a persistent job queue that supports PostgreSQL and can be used to run jobs "in the background" so that application code is not held up.
 ## Goals
 
 - The queue aims to be fast
-- The queue aims to be a layer on top of the core to effectively manage action requests
-- The queue aims to be the source of truth of how action requests are marked as
-  executed and how action requests results are propagated back
+- The queue aims to be a layer on top of `jellyfish-core` to allow for the effective management of queued objects of any type.
 
 # Usage
 
 Below is an example how to use this library:
 
-```js
+```ts
 import { Consumer } from '@balena/jellyfish-queue';
+import type { ActionRequestContract } from '@balena/jellyfish-types/build/core';
 
-const myConsumer = new Consumer(jellyfish, jellyfish.sessions.admin);
+const producer = new Producer(kernel, kernel.sessions.admin);
+await producer.initialize(context);
+
+const consumer = new Consumer(kernel, kernel.sessions.admin);
+await consumer.initializeWithEventHandler(
+  logContext,
+  async (payload: ActionRequestContract): void => {
+    console.log("Message received: ", payload)
+  }
+)
 ```
-
 # Documentation
 
 [![Publish Documentation](https://github.com/product-os/jellyfish-queue/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/product-os/jellyfish-queue/actions/workflows/publish-docs.yml)
