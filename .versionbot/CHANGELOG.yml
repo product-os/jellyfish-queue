@@ -1,4 +1,19 @@
 - commits:
+    - subject: Export ExecuteContract types
+      hash: 636d5fd47d7a939f5c034de652ab3c3e2e2d039c
+      body: |
+        Also clean up other type imports and usage.
+        Rename jellyfish instances to kernel.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 2.5.0
+  date: 2022-01-03T08:00:29.089Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: 6ca9541eeb75c170c0c46a0e52c8ffbb0b8cbc1a
       body: ''
