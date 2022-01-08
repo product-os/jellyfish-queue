@@ -47,10 +47,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@balena/jellyfish-assert": "^1.2.6",
-    "@balena/jellyfish-core": "^11.1.9",
+    "@balena/jellyfish-core": "^11.1.11",
     "@balena/jellyfish-environment": "^6.0.8",
-    "@balena/jellyfish-logger": "^4.0.14",
-    "@balena/jellyfish-metrics": "^2.0.18",
+    "@balena/jellyfish-logger": "^4.0.15",
+    "@balena/jellyfish-metrics": "^2.0.19",
     "@graphile/logger": "^0.2.0",
     "graphile-worker": "^0.12.2",
     "is-uuid": "^1.0.2",
