@@ -1,17 +1,17 @@
+import type { Kernel } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';
+import type {
+	ActionRequestContract,
+	LinkContract,
+} from '@balena/jellyfish-types/build/core';
 import { Logger } from '@graphile/logger';
 import * as graphileWorker from 'graphile-worker';
 import { once, noop } from 'lodash';
 import { contracts } from './contracts';
-import { Kernel } from '@balena/jellyfish-core';
-import {
-	ActionRequestContract,
-	LinkContract,
-} from '@balena/jellyfish-types/build/core';
-import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import { post } from './events';
+import type { ExecuteContract } from './types';
 
 const logger = getLogger(__filename);
 
@@ -72,13 +72,13 @@ const getExecuteLinkSlug = (actionRequest: ActionRequestContract): string => {
 };
 
 const linkExecuteEvent = async (
-	jellyfish: Kernel,
+	kernel: Kernel,
 	logContext: LogContext,
 	session: string,
 	eventCard: ExecuteContract,
 	actionRequest: ActionRequestContract,
 ): Promise<LinkContract> => {
-	return jellyfish.insertCard<LinkContract>(logContext, session, {
+	return kernel.insertCard<LinkContract>(logContext, session, {
 		slug: getExecuteLinkSlug(actionRequest),
 		type: 'link@1.0.0',
 		version: EXECUTE_LINK_VERSION,
@@ -101,7 +101,7 @@ export class Consumer implements QueueConsumer {
 	messagesBeingHandled: number = 0;
 	graphileRunner: graphileWorker.Runner | null = null;
 
-	constructor(private jellyfish: Kernel, private session: string) {}
+	constructor(private kernel: Kernel, private session: string) {}
 
 	async initializeWithEventHandler(
 		logContext: LogContext,
@@ -110,7 +110,7 @@ export class Consumer implements QueueConsumer {
 		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.jellyfish.replaceCard(logContext, this.session, card);
+				return this.kernel.replaceCard(logContext, this.session, card);
 			}),
 		);
 
@@ -126,7 +126,7 @@ export class Consumer implements QueueConsumer {
 		try {
 			this.graphileRunner = await graphileWorker.run({
 				noHandleSignals: true,
-				pgPool: this.jellyfish.backend.connection!.$pool as any,
+				pgPool: this.kernel.backend.connection!.$pool as any,
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
 				logger: new Logger((_scope) => {
@@ -201,7 +201,7 @@ export class Consumer implements QueueConsumer {
 	): Promise<ExecuteContract> {
 		const eventCard = await post(
 			logContext,
-			this.jellyfish,
+			this.kernel,
 			this.session,
 			{
 				action: actionRequest.data.action,
@@ -215,7 +215,7 @@ export class Consumer implements QueueConsumer {
 		);
 
 		await linkExecuteEvent(
-			this.jellyfish,
+			this.kernel,
 			logContext,
 			this.session,
 			eventCard,

@@ -1,25 +1,26 @@
-import { strict as nativeAssert } from 'assert';
 import * as assert from '@balena/jellyfish-assert';
-import { Kernel } from '@balena/jellyfish-core';
+import type { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
-import {
+import type {
 	ActionContract,
 	ActionRequestContract,
 	ContractData,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
-import * as graphileWorker from 'graphile-worker';
+import strict from 'assert';
+import { makeWorkerUtils } from 'graphile-worker';
+import type { WorkerUtils } from 'graphile-worker';
 import { v4 as isUUID } from 'is-uuid';
 import { v4 as uuidv4 } from 'uuid';
 import { contracts } from './contracts';
-import { getLastExecutionEvent, wait } from './events';
 import {
-	QueueInvalidSession,
 	QueueInvalidAction,
 	QueueInvalidRequest,
+	QueueInvalidSession,
 	QueueNoRequest,
 } from './errors';
+import { getLastExecutionEvent, wait } from './events';
+import type { ExecuteContract } from './types';
 
 const logger = getLogger(__filename);
 
@@ -89,7 +90,7 @@ async function props(obj: any) {
  */
 
 export class Producer implements QueueProducer {
-	constructor(private jellyfish: Kernel, private session: string) {}
+	constructor(private kernel: Kernel, private session: string) {}
 
 	/**
 	 * @summary Initialize the queue producer
@@ -102,7 +103,7 @@ export class Producer implements QueueProducer {
 		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.jellyfish.replaceCard(logContext, this.session, card);
+				return this.kernel.replaceCard(logContext, this.session, card);
 			}),
 		);
 
@@ -128,10 +129,10 @@ export class Producer implements QueueProducer {
 	async makeWorkerUtils(
 		logContext: LogContext,
 		retries: number = GRAPHILE_RETRIES,
-	): Promise<graphileWorker.WorkerUtils> {
+	): Promise<WorkerUtils> {
 		try {
-			const workerUtils = await graphileWorker.makeWorkerUtils({
-				pgPool: this.jellyfish.backend.connection!.$pool as any,
+			const workerUtils = await makeWorkerUtils({
+				pgPool: this.kernel.backend.connection!.$pool as any,
 			});
 			return workerUtils;
 		} catch (error) {
@@ -180,18 +181,18 @@ export class Producer implements QueueProducer {
 
 						// TODO: Require users to be explicit on the card version
 				  }
-				: this.jellyfish.getCardBySlug(
+				: this.kernel.getCardBySlug(
 						options.logContext,
 						session,
 						`${options.card}@latest`,
 				  ),
 
-			action: this.jellyfish.getCardBySlug<ActionContract>(
+			action: this.kernel.getCardBySlug<ActionContract>(
 				options.logContext,
 				session,
 				options.action,
 			),
-			session: this.jellyfish.getCardById<SessionContract>(
+			session: this.kernel.getCardById<SessionContract>(
 				options.logContext,
 				session,
 				session,
@@ -221,7 +222,7 @@ export class Producer implements QueueProducer {
 
 		// Use the Queue's session instead of the session passed as a parameter as the
 		// passed session shouldn't have permissions to create action requests
-		return this.jellyfish.insertCard<ActionRequestContract>(
+		return this.kernel.insertCard<ActionRequestContract>(
 			options.logContext,
 			this.session,
 			{
@@ -275,7 +276,7 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		await this.jellyfish.backend.connection!.any({
+		await this.kernel.backend.connection!.any({
 			name: 'enqueue-action-request',
 			text: "SELECT graphile_worker.add_job('actionRequest', $1);",
 			values: [request],
@@ -308,7 +309,7 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		const request = await wait(logContext, this.jellyfish, this.session, {
+		const request = await wait(logContext, this.kernel, this.session, {
 			id: actionRequest.id,
 			actor: actionRequest.data.actor,
 		});
@@ -324,7 +325,7 @@ export class Producer implements QueueProducer {
 			},
 		});
 
-		nativeAssert(
+		strict(
 			request,
 			new QueueNoRequest(
 				`Request not found: ${JSON.stringify(actionRequest, null, 2)}`,
@@ -365,7 +366,7 @@ export class Producer implements QueueProducer {
 	): Promise<ExecuteContract | null> {
 		return getLastExecutionEvent(
 			logContext,
-			this.jellyfish,
+			this.kernel,
 			this.session,
 			originator,
 		);
