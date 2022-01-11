@@ -3,6 +3,7 @@ import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';
 import { Logger } from '@graphile/logger';
 import * as graphileWorker from 'graphile-worker';
+import type { Pool } from 'pg';
 import { once, noop } from 'lodash';
 import { contracts } from './contracts';
 import { Kernel } from '@balena/jellyfish-core';
@@ -101,7 +102,11 @@ export class Consumer implements QueueConsumer {
 	messagesBeingHandled: number = 0;
 	graphileRunner: graphileWorker.Runner | null = null;
 
-	constructor(private jellyfish: Kernel, private session: string) {}
+	constructor(
+		private kernel: Kernel,
+		private pool: Pool,
+		private session: string,
+	) {}
 
 	async initializeWithEventHandler(
 		logContext: LogContext,
@@ -110,7 +115,7 @@ export class Consumer implements QueueConsumer {
 		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.jellyfish.replaceCard(logContext, this.session, card);
+				return this.kernel.replaceCard(logContext, this.session, card);
 			}),
 		);
 
@@ -126,7 +131,7 @@ export class Consumer implements QueueConsumer {
 		try {
 			this.graphileRunner = await graphileWorker.run({
 				noHandleSignals: true,
-				pgPool: this.jellyfish.backend.connection!.$pool as any,
+				pgPool: this.pool,
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
 				logger: new Logger((_scope) => {
@@ -201,7 +206,7 @@ export class Consumer implements QueueConsumer {
 	): Promise<ExecuteContract> {
 		const eventCard = await post(
 			logContext,
-			this.jellyfish,
+			this.kernel,
 			this.session,
 			{
 				action: actionRequest.data.action,
@@ -215,7 +220,7 @@ export class Consumer implements QueueConsumer {
 		);
 
 		await linkExecuteEvent(
-			this.jellyfish,
+			this.kernel,
 			logContext,
 			this.session,
 			eventCard,
