@@ -1,4 +1,29 @@
 - commits:
+    - subject: Update to `jellyfish-core` v12
+      hash: ef4f43d7c44ae5f50e88517b8fc61aaff9726fc1
+      body: |
+        Since the queue cannot get the DB connection pool from `Kernel.backend`
+        anymore it will have to be passed to `Consumer` and `Producer`'s
+        constructors.
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Carol Schulze <carol@balena.io>
+        signed-off-by: Carol Schulze <carol@balena.io>
+      author: Carol Schulze
+      nested: []
+    - subject: 'patch: Update dependency @balena/jellyfish-core to v12'
+      hash: 09acc3ebe1b374b4b2b151d565d0d93f92a3a5c2
+      body: |
+        Update @balena/jellyfish-core from 11.1.0 to 12.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 3.0.0
+  date: 2022-01-11T17:13:12.100Z
+- commits:
     - subject: 'patch: Update internal-patch'
       hash: bf89eb7c7340b07f3ee5527a14382773d8a85ddb
       body: ''
