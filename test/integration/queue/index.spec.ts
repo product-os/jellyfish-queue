@@ -1,3 +1,4 @@
+import { errors as coreErrors, Kernel } from '@balena/jellyfish-core';
 import {
 	ActionContract,
 	ActionRequestContract,
@@ -277,7 +278,7 @@ describe('queue', () => {
 						},
 					},
 				});
-			}).rejects.toThrowError(context.kernel.errors.JellyfishInvalidSession);
+			}).rejects.toThrowError(coreErrors.JellyfishInvalidSession);
 		});
 	});
 
@@ -349,7 +350,7 @@ describe('queue', () => {
 				producerOptions,
 			);
 
-			const actionRequest = context.kernel.defaults<ActionRequestContract>({
+			const actionRequest = Kernel.defaults<ActionRequestContract>({
 				id: enqueued.id,
 				slug: enqueued.slug,
 				type: enqueued.type,

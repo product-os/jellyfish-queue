@@ -1,5 +1,9 @@
 import { strict as assert } from 'assert';
-import { testUtils as coreTestUtils } from '@balena/jellyfish-core';
+import {
+	errors as coreErrors,
+	Kernel,
+	testUtils as coreTestUtils,
+} from '@balena/jellyfish-core';
 import { omit } from 'lodash';
 import { events, testUtils } from '../../../lib';
 
@@ -115,7 +119,7 @@ describe('events', () => {
 						},
 					} as any,
 				);
-			}).rejects.toThrowError(context.kernel.errors.JellyfishSchemaMismatch);
+			}).rejects.toThrowError(coreErrors.JellyfishSchemaMismatch);
 		});
 
 		test('should use the passed timestamp in the payload', async () => {
@@ -452,7 +456,7 @@ describe('events', () => {
 			);
 
 			expect(event).toEqual(
-				context.kernel.defaults({
+				Kernel.defaults({
 					created_at: card.created_at,
 					id: card.id,
 					name: null,
@@ -527,7 +531,7 @@ describe('events', () => {
 			);
 
 			expect(event).toEqual(
-				context.kernel.defaults({
+				Kernel.defaults({
 					created_at: card1.created_at,
 					id: card1.id,
 					slug: event.slug,
@@ -602,7 +606,7 @@ describe('events', () => {
 			);
 
 			expect(event).toEqual(
-				context.kernel.defaults({
+				Kernel.defaults({
 					created_at: card1.created_at,
 					id: card1.id,
 					slug: event.slug,

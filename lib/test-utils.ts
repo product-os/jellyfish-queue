@@ -35,15 +35,15 @@ export const newContext = async (
 	const coreTestContext = await coreTestUtils.newContext(options);
 
 	/*const sessionContract = await coreTestContext.kernel.getCardById<SessionContract>(
-        coreTestContext.logContext,
-        coreTestContext.session,
-        coreTestContext.session,
-    );
-    const queueUser = await coreTestContext.kernel.getCardById<UserContract>(
-        coreTestContext.logContext,
-        coreTestContext.session,
-        sessionContract!.data.actor as string,
-    );*/
+		coreTestContext.logContext,
+		coreTestContext.session,
+		coreTestContext.session,
+	);
+	const queueUser = await coreTestContext.kernel.getCardById<UserContract>(
+		coreTestContext.logContext,
+		coreTestContext.session,
+		sessionContract!.data.actor as string,
+	);*/
 
 	const consumedActionRequests: ActionRequestContract[] = [];
 	const dequeue = async (
@@ -64,10 +64,12 @@ export const newContext = async (
 
 	const consumer = new Consumer(
 		coreTestContext.kernel,
+		coreTestContext.pool,
 		coreTestContext.session,
 	);
 	const producer = new Producer(
 		coreTestContext.kernel,
+		coreTestContext.pool,
 		coreTestContext.session,
 	);
 
