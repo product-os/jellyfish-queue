@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update internal-patch'
+      hash: 09ab347d4f9122145732746329ccb8ef36a30046
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 3.0.3
+  date: 2022-01-15T01:22:49.251Z
+- commits:
     - subject: 'patch: Update external-non-major Docker tags'
       hash: 6b1cf842417fbe29cc38d21b232f822397b85015
       body: ''
