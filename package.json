@@ -50,7 +50,7 @@
     "@balena/jellyfish-core": "^12.1.6",
     "@balena/jellyfish-environment": "^6.0.9",
     "@balena/jellyfish-logger": "^4.0.17",
-    "@balena/jellyfish-metrics": "^2.0.21",
+    "@balena/jellyfish-metrics": "^2.0.22",
     "@graphile/logger": "^0.2.0",
     "graphile-worker": "^0.12.2",
     "is-uuid": "^1.0.2",
