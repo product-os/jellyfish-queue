@@ -1,4 +1,17 @@
 - commits:
+    - subject: Store requests with logContext
+      hash: 8a15eea907d1a5c8d9c926da6535e6f7449677cb
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 4.0.0
+  date: 2022-01-17T07:15:09.535Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-metrics to ^2.0.22'
       hash: 94c914dad3a99fae6bd24a2264943476dfeefca9
       body: ''
