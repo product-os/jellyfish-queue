@@ -7,12 +7,10 @@ import type { Pool } from 'pg';
 import { once, noop } from 'lodash';
 import { contracts } from './contracts';
 import { Kernel } from '@balena/jellyfish-core';
-import {
-	ActionRequestContract,
-	LinkContract,
-} from '@balena/jellyfish-types/build/core';
+import { LinkContract } from '@balena/jellyfish-types/build/core';
 import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import { post } from './events';
+import { ActionRequestContract } from './types';
 
 const logger = getLogger(__filename);
 
