@@ -4,10 +4,10 @@ import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import {
 	ActionContract,
-	ActionRequestContract,
 	ContractData,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
+import type { ActionRequestContract } from './types';
 import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import * as graphileWorker from 'graphile-worker';
 import { v4 as isUUID } from 'is-uuid';
@@ -235,7 +235,7 @@ export class Producer implements QueueProducer {
 				data: {
 					epoch: date.valueOf(),
 					timestamp: date.toISOString(),
-					context: options.logContext,
+					logContext: options.logContext,
 					originator: options.originator,
 					actor: cards.session!.data.actor,
 					action: `${cards.action!.slug}@${cards.action!.version}`,

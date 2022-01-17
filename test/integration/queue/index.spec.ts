@@ -1,11 +1,11 @@
 import { errors as coreErrors, Kernel } from '@balena/jellyfish-core';
 import {
 	ActionContract,
-	ActionRequestContract,
 	Contract,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
 import { errors, ProducerOptions, testUtils } from '../../../lib';
+import { ActionRequestContract } from '../../../lib/types';
 
 let context: testUtils.TestContext;
 
