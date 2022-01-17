@@ -10,14 +10,14 @@ import { PostResults, PostOptions } from './consumer';
 const logger = getLogger(__filename);
 
 /**
- * @summary The execution event card type slug
+ * @summary The execution event contract type slug
  * @type {String}
  * @private
  */
 const EXECUTION_EVENT_TYPE: string = 'execute';
 
 /**
- * @summary The execution event card version
+ * @summary The execution event contract version
  * @type {String}
  * @private
  * @description
@@ -27,7 +27,7 @@ const EXECUTION_EVENT_TYPE: string = 'execute';
 const EXECUTION_EVENT_VERSION: string = '1.0.0';
 
 /**
- * @summary Get the slug of an execute event card
+ * @summary Get the slug of an execute event contract
  * @function
  * @public
  *
@@ -52,19 +52,19 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  * @param {String} options.actor - actor id
  * @param {String} options.action - action id
  * @param {String} options.timestamp - action timestamp
- * @param {String} options.card - action input card id
- * @param {String} [options.originator] - action originator card id
+ * @param {String} options.card - action input contract id
+ * @param {String} [options.originator] - action originator contract id
  * @param {Object} results - action results
  * @param {Boolean} results.error - whether the result is an error
  * @param {Any} results.data - action result
- * @returns {Object} event card
+ * @returns {Object} event contract
  *
  * @example
  * const session = '4a962ad9-20b5-4dd8-a707-bf819593cc84'
- * const card = await events.post({ ... }, jellyfish, session, {
+ * const contract = await events.post({ ... }, jellyfish, session, {
  *   id: '414f2345-4f5e-4571-820f-28a49731733d',
  *   action: '57692206-8da2-46e1-91c9-159b2c6928ef',
- *   card: '033d9184-70b2-4ec9-bc39-9a249b186422',
+ *   contract: '033d9184-70b2-4ec9-bc39-9a249b186422',
  *   actor: '57692206-8da2-46e1-91c9-159b2c6928ef',
  *   originator: 'cb3523c5-b37d-41c8-ae32-9e7cc9309165',
  *   timestamp: '2018-06-30T19:34:42.829Z'
@@ -73,7 +73,7 @@ export const getExecuteEventSlug = (options: { id: string }): string => {
  *   data: '414f2345-4f5e-4571-820f-28a49731733d'
  * })
  *
- * console.log(card.id)
+ * console.log(contract.id)
  */
 export const post = async (
 	logContext: LogContext,
@@ -89,7 +89,7 @@ export const post = async (
 		actor: options.actor,
 		payload: {
 			action: options.action,
-			card: options.card,
+			card: (options.contract || options.card) as string,
 			timestamp: options.timestamp,
 			error: results.error,
 			data: results.data,
@@ -114,7 +114,11 @@ export const post = async (
 		contents.data.originator = options.originator;
 	}
 
-	return jellyfish.insertCard<ExecuteContract>(logContext, session, contents);
+	return jellyfish.insertContract<ExecuteContract>(
+		logContext,
+		session,
+		contents,
+	);
 };
 
 /**
@@ -125,7 +129,7 @@ export const post = async (
  * @param {LogContext} logContext - log context
  * @param {Object} jellyfish - jellyfish instance
  * @param {String} session - session id
- * @param {String} originator - originator card id
+ * @param {String} originator - originator contract id
  * @returns {(Object|Null)} last execution event
  *
  * @example
@@ -184,7 +188,6 @@ export interface WaitOptions {
 	id: string;
 	actor: string;
 	action?: string;
-	card?: string;
 }
 
 /**
@@ -202,12 +205,12 @@ export interface WaitOptions {
  *
  * @example
  * const session = '4a962ad9-20b5-4dd8-a707-bf819593cc84'
- * const card = await events.wait({ ... }, jellyfish, session, {
+ * const contract = await events.wait({ ... }, jellyfish, session, {
  *   id: '4a962ad9-20b5-4dd8-a707-bf819593cc84',
- *   card: '033d9184-70b2-4ec9-bc39-9a249b186422'
+ *   contract: '033d9184-70b2-4ec9-bc39-9a249b186422'
  * })
  *
- * console.log(card.id)
+ * console.log(contract.id)
  */
 export const wait = async (
 	logContext: LogContext,
@@ -287,18 +290,22 @@ export const wait = async (
 		}
 
 		jellyfish
-			.getCardBySlug(logContext, session, `${slug}@${EXECUTION_EVENT_VERSION}`)
-			.then((card) => {
-				if (!card) {
+			.getContractBySlug(
+				logContext,
+				session,
+				`${slug}@${EXECUTION_EVENT_VERSION}`,
+			)
+			.then((contract) => {
+				if (!contract) {
 					return;
 				}
 
 				logger.info(logContext, 'Found results on first slug query', {
-					slug: card.slug,
-					data: Object.keys(card.data),
+					slug: contract.slug,
+					data: Object.keys(contract.data),
 				});
 
-				result = result || (card as ExecuteContract);
+				result = result || (contract as ExecuteContract);
 				stream.close();
 			})
 			.catch((error) => {

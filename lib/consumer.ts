@@ -13,6 +13,7 @@ import {
 } from '@balena/jellyfish-types/build/core';
 import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import { post } from './events';
+import { RequireOnlyOne } from './require-only-one';
 
 const logger = getLogger(__filename);
 
@@ -59,11 +60,17 @@ export interface PostResults {
 	error: boolean;
 }
 
-export interface PostOptions {
+export type PostOptions = RequireOnlyOne<
+	PostOptionsDubious,
+	'contract' | 'card'
+>;
+interface PostOptionsDubious {
 	id: string;
 	actor: string;
 	action: string;
 	timestamp: string;
+	contract: string;
+	/** @deprecated */
 	card: string;
 	originator?: string;
 }
@@ -76,10 +83,10 @@ const linkExecuteEvent = async (
 	jellyfish: Kernel,
 	logContext: LogContext,
 	session: string,
-	eventCard: ExecuteContract,
+	eventContract: ExecuteContract,
 	actionRequest: ActionRequestContract,
 ): Promise<LinkContract> => {
-	return jellyfish.insertCard<LinkContract>(logContext, session, {
+	return jellyfish.insertContract<LinkContract>(logContext, session, {
 		slug: getExecuteLinkSlug(actionRequest),
 		type: 'link@1.0.0',
 		version: EXECUTE_LINK_VERSION,
@@ -87,8 +94,8 @@ const linkExecuteEvent = async (
 		data: {
 			inverseName: LINK_EXECUTE.INVERSE_NAME,
 			from: {
-				id: eventCard.id,
-				type: eventCard.type,
+				id: eventContract.id,
+				type: eventContract.type,
 			},
 			to: {
 				id: actionRequest.id,
@@ -112,10 +119,10 @@ export class Consumer implements QueueConsumer {
 		logContext: LogContext,
 		onMessageEventHandler: OnMessageEventHandler,
 	): Promise<void> {
-		logger.info(logContext, 'Inserting essential cards');
+		logger.info(logContext, 'Inserting essential contracts');
 		await Promise.all(
-			Object.values(contracts).map(async (card) => {
-				return this.kernel.replaceCard(logContext, this.session, card);
+			Object.values(contracts).map(async (contract) => {
+				return this.kernel.replaceContract(logContext, this.session, contract);
 			}),
 		);
 
@@ -196,7 +203,7 @@ export class Consumer implements QueueConsumer {
 	 * @param {PostResults} results - action results
 	 * @param {Boolean} results.error - whether the result is an error
 	 * @param {Any} results.data - action result
-	 * @returns {ExecuteContract} execute event card
+	 * @returns {ExecuteContract} execute event contract
 	 */
 	async postResults(
 		_actor: string,
@@ -204,7 +211,7 @@ export class Consumer implements QueueConsumer {
 		actionRequest: ActionRequestContract,
 		results: PostResults,
 	): Promise<ExecuteContract> {
-		const eventCard = await post(
+		const eventContract = await post(
 			logContext,
 			this.kernel,
 			this.session,
@@ -212,7 +219,7 @@ export class Consumer implements QueueConsumer {
 				action: actionRequest.data.action,
 				actor: actionRequest.data.actor,
 				id: actionRequest.id,
-				card: actionRequest.data.input.id,
+				contract: actionRequest.data.input.id,
 				timestamp: actionRequest.data.timestamp,
 				originator: actionRequest.data.originator,
 			},
@@ -223,10 +230,10 @@ export class Consumer implements QueueConsumer {
 			this.kernel,
 			logContext,
 			this.session,
-			eventCard,
+			eventContract,
 			actionRequest,
 		);
 
-		return eventCard;
+		return eventContract;
 	}
 }
