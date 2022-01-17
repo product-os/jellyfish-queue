@@ -1,4 +1,15 @@
 - commits:
+    - subject: Replace occurrences of card with contract.
+      hash: 78d8362139353be50e998187d8aac9db3e8b25cd
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Taro Murao
+      nested: []
+  version: 3.1.0
+  date: 2022-01-17T20:31:20.067Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^12.2.2'
       hash: 9cb94b1803e3a6ceef212089e45c1dfe7da6a35f
       body: ''
