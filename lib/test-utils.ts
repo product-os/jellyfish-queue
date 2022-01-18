@@ -16,11 +16,11 @@ export interface TestContext extends coreTestUtils.TestContext {
 	};
 }
 
-const actionCreateCard = {
+const actionCreateContract = {
 	slug: 'action-create-card',
 	type: 'action@1.0.0',
 	version: '1.0.0',
-	name: 'Create a new card',
+	name: 'Create a new contact',
 	data: {
 		arguments: {},
 	},
@@ -34,12 +34,12 @@ export const newContext = async (
 ): Promise<TestContext> => {
 	const coreTestContext = await coreTestUtils.newContext(options);
 
-	/*const sessionContract = await coreTestContext.kernel.getCardById<SessionContract>(
+	/*const sessionContract = await coreTestContext.kernel.getContractById<SessionContract>(
 		coreTestContext.logContext,
 		coreTestContext.session,
 		coreTestContext.session,
 	);
-	const queueUser = await coreTestContext.kernel.getCardById<UserContract>(
+	const queueUser = await coreTestContext.kernel.getContractById<UserContract>(
 		coreTestContext.logContext,
 		coreTestContext.session,
 		sessionContract!.data.actor as string,
@@ -74,10 +74,10 @@ export const newContext = async (
 	);
 
 	await Promise.all([
-		await coreTestContext.kernel.insertCard(
+		await coreTestContext.kernel.insertContract(
 			coreTestContext.logContext,
 			coreTestContext.session,
-			actionCreateCard,
+			actionCreateContract,
 		),
 		consumer.initializeWithEventHandler(
 			coreTestContext.logContext,
