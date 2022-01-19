@@ -1,4 +1,17 @@
 - commits:
+    - subject: Bump jellyfish-core to v13
+      hash: 5987f3e845b9a515c5383b68a6f7eac2ad310909
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 3.1.4
+  date: 2022-01-19T08:33:39.508Z
+- commits:
     - subject: Bring in action-request stream test
       hash: 24c2d7bb68fdfc810dc516dc123f445ed599a10e
       body: ''
