@@ -73,6 +73,8 @@ export const newContext = async (
 		coreTestContext.session,
 	);
 
+	// Initialize the producer first to ensure necessary types exist
+	await producer.initialize(coreTestContext.logContext);
 	await Promise.all([
 		await coreTestContext.kernel.insertCard(
 			coreTestContext.logContext,
@@ -85,7 +87,6 @@ export const newContext = async (
 				consumedActionRequests.push(payload);
 			},
 		),
-		producer.initialize(coreTestContext.logContext),
 	]);
 
 	return {
