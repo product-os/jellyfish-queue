@@ -1,4 +1,17 @@
 - commits:
+    - subject: Add action and action-request contracts/types
+      hash: 8b08ca7405b4fa98dff4bd345752ec7e945efc90
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 3.1.0
+  date: 2022-01-19T02:11:40.281Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^12.2.3'
       hash: d47809af05aac988f7fedde4f0deb71e264f45e9
       body: ''
