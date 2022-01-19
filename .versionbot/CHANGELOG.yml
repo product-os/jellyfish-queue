@@ -1,4 +1,17 @@
 - commits:
+    - subject: Bring in action-request stream test
+      hash: 24c2d7bb68fdfc810dc516dc123f445ed599a10e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 3.1.3
+  date: 2022-01-19T06:25:10.940Z
+- commits:
     - subject: 'patch: Update dependency typedoc to ^0.22.11'
       hash: 66200b57c43fb036b8243f36c8d2e71142e7bd39
       body: |
