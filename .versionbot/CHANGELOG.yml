@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'patch: Update internal-non-major'
+      hash: 10f2b44286db74171843c08b72c380032454a676
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 3.1.5
+  date: 2022-01-19T11:57:12.699Z
+- commits:
     - subject: Bump jellyfish-core to v13
       hash: 5987f3e845b9a515c5383b68a6f7eac2ad310909
       body: ''
