@@ -1,11 +1,11 @@
-import { strict as assert } from 'assert';
 import {
 	errors as coreErrors,
 	Kernel,
 	testUtils as coreTestUtils,
 } from '@balena/jellyfish-core';
+import { strict as assert } from 'assert';
 import { omit } from 'lodash';
-import { events, testUtils } from '../../../lib';
+import { events, testUtils } from '../../lib';
 
 let context: testUtils.TestContext;
 
@@ -40,7 +40,7 @@ describe('events', () => {
 				},
 			);
 
-			const card = await context.kernel.getCardById(
+			const card = await context.kernel.getContractById(
 				context.logContext,
 				context.session,
 				event.id,
@@ -284,7 +284,11 @@ describe('events', () => {
 			setTimeout(() => {
 				try {
 					context.kernel
-						.insertCard(context.logContext, context.session, BIG_EXECUTE_CARD)
+						.insertContract(
+							context.logContext,
+							context.session,
+							BIG_EXECUTE_CARD,
+						)
 						.then((execute) => {
 							expect(omit(execute, ['id', 'loop'])).toEqual(
 								Object.assign({}, BIG_EXECUTE_CARD, {
@@ -663,7 +667,7 @@ describe('events', () => {
 
 		test('should only consider execute cards', async () => {
 			const id = coreTestUtils.generateRandomId();
-			await context.kernel.insertCard(context.logContext, context.session, {
+			await context.kernel.insertContract(context.logContext, context.session, {
 				type: 'card@1.0.0',
 				slug: coreTestUtils.generateRandomId(),
 				version: '1.0.0',

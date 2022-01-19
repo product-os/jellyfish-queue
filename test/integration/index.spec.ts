@@ -6,7 +6,7 @@ import {
 	errors,
 	ProducerOptions,
 	testUtils,
-} from '../../../lib';
+} from '../../lib';
 
 let context: testUtils.TestContext;
 
@@ -21,12 +21,12 @@ afterAll(async () => {
 describe('queue', () => {
 	describe('.enqueue()', () => {
 		test('should include the actor from the passed session', async () => {
-			const typeCard = (await context.kernel.getCardBySlug(
+			const typeCard = (await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
 			)) as Contract;
-			const session = await context.kernel.getCardById<SessionContract>(
+			const session = await context.kernel.getContractById<SessionContract>(
 				context.logContext,
 				context.session,
 				context.session,
@@ -58,12 +58,12 @@ describe('queue', () => {
 		});
 
 		test('should include the whole passed action', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
 			);
-			const actionCard = await context.kernel.getCardBySlug<ActionContract>(
+			const actionCard = await context.kernel.getContractBySlug<ActionContract>(
 				context.logContext,
 				context.session,
 				'action-create-card@latest',
@@ -96,7 +96,7 @@ describe('queue', () => {
 		});
 
 		test('should set an originator', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -127,7 +127,7 @@ describe('queue', () => {
 		});
 
 		test('should take a current date', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -173,7 +173,7 @@ describe('queue', () => {
 
 		test('should set a present timestamp', async () => {
 			const currentDate = new Date();
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -228,7 +228,7 @@ describe('queue', () => {
 		});
 
 		test('should throw if the action was not found', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -257,7 +257,7 @@ describe('queue', () => {
 		});
 
 		test('should throw if the session was not found', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -290,7 +290,7 @@ describe('queue', () => {
 		});
 
 		test('should not let the same owner take a request twice', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -325,7 +325,7 @@ describe('queue', () => {
 		});
 
 		test('should cope with link materialization failures', async () => {
-			const typeCard = await context.kernel.getCardBySlug(
+			const typeCard = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				'card@latest',
@@ -371,7 +371,7 @@ describe('queue', () => {
 			);
 
 			// Simulate non-materialized links
-			await context.kernel.replaceCard(
+			await context.kernel.replaceContract(
 				context.logContext,
 				context.session,
 				Object.assign({}, enqueued, {
@@ -379,7 +379,7 @@ describe('queue', () => {
 				}),
 			);
 
-			const currentRequest = await context.kernel.getCardBySlug(
+			const currentRequest = await context.kernel.getContractBySlug(
 				context.logContext,
 				context.session,
 				`${enqueued.slug}@${enqueued.version}`,
