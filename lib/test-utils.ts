@@ -1,8 +1,8 @@
 import { testUtils as coreTestUtils } from '@balena/jellyfish-core';
-import type { ActionRequestContract } from '@balena/jellyfish-types/build/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Consumer } from './consumer';
 import { Producer } from './producer';
+import type { ActionRequestContract } from './types';
 
 /**
  * Context that can be used in tests against the queue.
