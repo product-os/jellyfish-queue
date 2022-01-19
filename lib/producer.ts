@@ -3,8 +3,6 @@ import * as assert from '@balena/jellyfish-assert';
 import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import {
-	ActionContract,
-	ActionRequestContract,
 	ContractData,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
@@ -21,6 +19,7 @@ import {
 	QueueInvalidRequest,
 	QueueNoRequest,
 } from './errors';
+import type { ActionContract, ActionRequestContract } from './types';
 
 const logger = getLogger(__filename);
 
