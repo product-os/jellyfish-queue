@@ -1,6 +1,6 @@
 {
   "name": "@balena/jellyfish-queue",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/product-os/jellyfish-queue.git"
@@ -79,6 +79,6 @@
     "pre-commit": "npx lint-staged"
   },
   "versionist": {
-    "publishedAt": "2022-01-19T11:57:12.871Z"
+    "publishedAt": "2022-01-19T14:14:34.379Z"
   }
 }
