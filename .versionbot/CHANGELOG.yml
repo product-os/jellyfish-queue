@@ -1,4 +1,17 @@
 - commits:
+    - subject: Bump jellyfish-core to v13.2.0
+      hash: edf52b06f965ad50c5b00e043092804525a60920
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 3.1.8
+  date: 2022-01-20T05:52:16.762Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^13.1.1'
       hash: b2bbc5a5c3a9e1c4bd6bea5acc425278efe7e273
       body: ''
