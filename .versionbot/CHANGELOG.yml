@@ -1,4 +1,17 @@
 - commits:
+    - subject: Bring in ExecuteContract type
+      hash: 45089240498cb68a78dbe07b8b9d70ae2be08dba
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 3.2.0
+  date: 2022-01-21T01:51:17.921Z
+- commits:
     - subject: Bump jellyfish-core to v13.2.0
       hash: edf52b06f965ad50c5b00e043092804525a60920
       body: ''
