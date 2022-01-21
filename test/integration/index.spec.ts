@@ -2,7 +2,7 @@ import { errors as coreErrors, Kernel } from '@balena/jellyfish-core';
 import { Contract, SessionContract } from '@balena/jellyfish-types/build/core';
 import {
 	ActionContract,
-	ActionRequestContract,
+	ActionRequestData,
 	errors,
 	ProducerOptions,
 	testUtils,
@@ -351,7 +351,7 @@ describe('queue', () => {
 				producerOptions,
 			);
 
-			const actionRequest = Kernel.defaults<ActionRequestContract>({
+			const actionRequest = Kernel.defaults<ActionRequestData>({
 				id: enqueued.id,
 				slug: enqueued.slug,
 				type: enqueued.type,
