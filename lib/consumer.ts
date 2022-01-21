@@ -1,16 +1,15 @@
+import { Kernel } from '@balena/jellyfish-core';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';
+import type { LinkContract } from '@balena/jellyfish-types/build/core';
 import { Logger } from '@graphile/logger';
 import * as graphileWorker from 'graphile-worker';
+import _ from 'lodash';
 import type { Pool } from 'pg';
-import { once, noop } from 'lodash';
 import { contracts } from './contracts';
-import { Kernel } from '@balena/jellyfish-core';
-import { LinkContract } from '@balena/jellyfish-types/build/core';
-import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
 import { post } from './events';
-import type { ActionRequestContract } from './types';
+import type { ActionRequestContract, ExecuteContract } from './types';
 
 const logger = getLogger(__filename);
 
@@ -118,7 +117,7 @@ export class Consumer implements QueueConsumer {
 		);
 
 		await this.run(logContext, onMessageEventHandler);
-		this.graphileRunner!.stop = once(this.graphileRunner!.stop);
+		this.graphileRunner!.stop = _.once(this.graphileRunner!.stop);
 	}
 
 	async run(
@@ -133,7 +132,7 @@ export class Consumer implements QueueConsumer {
 				concurrency: defaultEnvironment.queue.concurrency,
 				pollInterval: 1000,
 				logger: new Logger((_scope) => {
-					return noop;
+					return _.noop;
 				}),
 				taskList: {
 					actionRequest: async (result) => {
