@@ -1,4 +1,15 @@
 - commits:
+    - subject: Upgrade core to v14
+      hash: 413e6a19fb163ea86639bf444c2d9da764d10023
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+      author: karaxuna
+      nested: []
+  version: 4.0.0
+  date: 2022-01-21T13:06:36.104Z
+- commits:
     - subject: 'patch: Update dependency @balena/jellyfish-core to ^13.3.0'
       hash: c699584430f3019538a8030cdb935dcf72b6b752
       body: ''
