@@ -1,11 +1,8 @@
 import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
-import {
-	ExecuteContract,
-	ExecuteContractDefinition,
-} from '@balena/jellyfish-types/build/queue';
 import { JsonSchema } from '@balena/jellyfish-types';
-import { PostResults, PostOptions } from './consumer';
+import type { PostOptions, PostResults } from './consumer';
+import type { ExecuteContract, ExecuteContractDefinition } from './types';
 
 const logger = getLogger(__filename);
 

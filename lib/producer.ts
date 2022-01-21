@@ -1,4 +1,3 @@
-import { strict as nativeAssert } from 'assert';
 import * as assert from '@balena/jellyfish-assert';
 import { Kernel } from '@balena/jellyfish-core';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
@@ -6,20 +5,24 @@ import {
 	ContractData,
 	SessionContract,
 } from '@balena/jellyfish-types/build/core';
-import { ExecuteContract } from '@balena/jellyfish-types/build/queue';
+import { strict as nativeAssert } from 'assert';
 import * as graphileWorker from 'graphile-worker';
 import { v4 as isUUID } from 'is-uuid';
 import type { Pool } from 'pg';
 import { v4 as uuidv4 } from 'uuid';
 import { contracts } from './contracts';
-import { getLastExecutionEvent, wait } from './events';
 import {
-	QueueInvalidSession,
 	QueueInvalidAction,
 	QueueInvalidRequest,
+	QueueInvalidSession,
 	QueueNoRequest,
 } from './errors';
-import type { ActionContract, ActionRequestContract } from './types';
+import { getLastExecutionEvent, wait } from './events';
+import type {
+	ActionContract,
+	ActionRequestContract,
+	ExecuteContract,
+} from './types';
 
 const logger = getLogger(__filename);
 
