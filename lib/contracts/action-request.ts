@@ -26,6 +26,12 @@ export const actionRequest = {
 						},
 						context: {
 							type: 'object',
+							properties: {
+								id: {
+									type: 'string',
+								},
+							},
+							required: ['id'],
 						},
 						originator: {
 							type: 'string',
