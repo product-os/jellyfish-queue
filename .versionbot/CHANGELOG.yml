@@ -1,4 +1,23 @@
 - commits:
+    - subject: Update the schema for action-request contracts to match LogContext
+      hash: dd4de8401ee841a57faf293247eba8937265fd21
+      body: >
+        The context value is an instance of
+
+        [`LogContext`](https://github.com/product-os/jellyfish-logger/blob/v4.0.32/lib/index.ts#L10),
+
+        and should always include an `id` field of type string.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+      nested: []
+  version: 4.0.33
+  title: "'Update the schema for action-request contracts to match LogContext'"
+  date: 2022-02-11T12:11:07.928Z
+- commits:
     - subject: Update @balena/jellyfish-core from 14.2.3 to 14.3.0
       hash: b6fd694da1a2c350b9f057508705d104c2b4bd74
       body: ""
