@@ -46,10 +46,10 @@
   "author": "Balena.io. <hello@balena.io>",
   "license": "Apache-2.0",
   "dependencies": {
-    "@balena/jellyfish-assert": "^1.2.13",
-    "@balena/jellyfish-core": "^14.3.2",
+    "@balena/jellyfish-assert": "^1.2.14",
+    "@balena/jellyfish-core": "^14.3.3",
     "@balena/jellyfish-environment": "^6.0.15",
-    "@balena/jellyfish-logger": "^4.0.33",
+    "@balena/jellyfish-logger": "^4.0.34",
     "@balena/jellyfish-metrics": "^2.0.37",
     "@graphile/logger": "^0.2.0",
     "graphile-worker": "^0.12.2",
