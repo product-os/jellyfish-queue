@@ -1,4 +1,24 @@
 - commits:
+    - subject: Update internal-patch
+      hash: b84e99769eb6a4074289a866f29fdc5d28f04627
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+    - subject: Update typedoc from 0.22.11 to 0.22.12
+      hash: 609d93a5c86ef4d56c6df94586558e0d6cf5fec2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 4.0.48
+  title: "'Update internal-patch'"
+  date: 2022-02-20T10:17:15.966Z
+- commits:
     - subject: Replace card with contract
       hash: d47f50a1c4b3f8e7439c4b1b921c297396398e7d
       body: |
