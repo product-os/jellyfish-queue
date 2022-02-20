@@ -1,4 +1,21 @@
 - commits:
+    - subject: Replace card with contract
+      hash: d47f50a1c4b3f8e7439c4b1b921c297396398e7d
+      body: |
+        Replace calls to kernel methods from
+        the deprecated "card" variant to the
+        newer "contract" variant.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 4.0.47
+  title: "'Replace card with contract'"
+  date: 2022-02-20T02:04:52.264Z
+- commits:
     - subject: Update balena/open-balena-db from v5.0.2 to v5.0.3
       hash: 72fd4395752146186574b504fd0429e0d33ef4a8
       body: ""
