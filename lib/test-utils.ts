@@ -76,7 +76,7 @@ export const newContext = async (
 	// Initialize the producer first to ensure necessary types exist
 	await producer.initialize(coreTestContext.logContext);
 	await Promise.all([
-		await coreTestContext.kernel.insertCard(
+		await coreTestContext.kernel.insertContract(
 			coreTestContext.logContext,
 			coreTestContext.session,
 			actionCreateCard,

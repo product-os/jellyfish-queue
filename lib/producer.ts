@@ -109,7 +109,7 @@ export class Producer implements QueueProducer {
 		logger.info(logContext, 'Inserting essential cards');
 		await Promise.all(
 			Object.values(contracts).map(async (card) => {
-				return this.kernel.replaceCard(logContext, this.session, card);
+				return this.kernel.replaceContract(logContext, this.session, card);
 			}),
 		);
 
