@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add support for scheduled actions
+      hash: be9e13eb72be83bb02b94db2435b295fa3bc6525
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 4.1.0
+  title: "'Add support for scheduled actions'"
+  date: 2022-02-21T03:30:37.807Z
+- commits:
     - subject: Update internal-patch
       hash: b84e99769eb6a4074289a866f29fdc5d28f04627
       body: ""
