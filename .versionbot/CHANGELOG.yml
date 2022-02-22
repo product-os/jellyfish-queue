@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update internal-patch
+      hash: df2cb04b2e7b5452316839f4e035809d71405630
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 4.1.1
+  title: "'Update internal-patch'"
+  date: 2022-02-22T09:00:11.697Z
+- commits:
     - subject: Add support for scheduled actions
       hash: be9e13eb72be83bb02b94db2435b295fa3bc6525
       body: ""
