@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update @balena/jellyfish-core from 15.0.7 to 16.0.0
+      hash: c7ad47c477eb2a29492223a2894e113bdf42a7f5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 4.1.11
+  title: "'Update @balena/jellyfish-core from 15.0.7 to 16.0.0'"
+  date: 2022-03-01T17:36:41.746Z
+- commits:
     - subject: Update internal-patch
       hash: 516113e06520864887a4dacbbd9f973d3cbb7b93
       body: ""
