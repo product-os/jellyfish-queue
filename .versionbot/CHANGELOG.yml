@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update internal-patch
+      hash: ea198fdf50631f0a101a716cec7c97d2bd58e427
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 4.1.20
+  title: "'Update internal-patch'"
+  date: 2022-03-07T07:27:18.889Z
+- commits:
     - subject: Update typescript from 4.5.5 to 4.6.2
       hash: 0516503287bb3e8dc535a3e3eefcdd5aad38de31
       body: ""
