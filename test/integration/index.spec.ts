@@ -1,4 +1,4 @@
-import { errors as coreErrors, Kernel } from '@balena/jellyfish-core';
+import { errors as coreErrors, Kernel } from 'autumndb';
 import { Contract, SessionContract } from '@balena/jellyfish-types/build/core';
 import {
 	ActionContract,

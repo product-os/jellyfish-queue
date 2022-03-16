@@ -2,7 +2,7 @@ import {
 	errors as coreErrors,
 	Kernel,
 	testUtils as coreTestUtils,
-} from '@balena/jellyfish-core';
+} from 'autumndb';
 import { strict as assert } from 'assert';
 import { omit } from 'lodash';
 import { events, testUtils } from '../../lib';
