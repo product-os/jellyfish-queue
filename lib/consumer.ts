@@ -1,4 +1,4 @@
-import { Kernel } from '@balena/jellyfish-core';
+import { Kernel } from 'autumndb';
 import { defaultEnvironment } from '@balena/jellyfish-environment';
 import { getLogger, LogContext } from '@balena/jellyfish-logger';
 import * as metrics from '@balena/jellyfish-metrics';

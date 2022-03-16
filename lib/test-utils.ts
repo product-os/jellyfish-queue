@@ -1,4 +1,4 @@
-import { testUtils as coreTestUtils } from '@balena/jellyfish-core';
+import { testUtils as coreTestUtils } from 'autumndb';
 import { v4 as uuidv4 } from 'uuid';
 import { Consumer } from './consumer';
 import { Producer } from './producer';
