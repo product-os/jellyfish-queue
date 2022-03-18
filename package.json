@@ -51,7 +51,7 @@
     "@balena/jellyfish-logger": "^5.0.7",
     "@balena/jellyfish-metrics": "^2.0.48",
     "@graphile/logger": "^0.2.0",
-    "autumndb": "^17.0.6",
+    "autumndb": "^19.0.0",
     "graphile-worker": "^0.12.2",
     "is-uuid": "^1.0.2",
     "lodash": "^4.17.21",
