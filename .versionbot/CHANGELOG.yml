@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update autumndb from 19.0.3 to 19.1.0
+      hash: b9f2051e2595add4398e6b955c76c40e8bcd759e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 4.1.28
+  title: "'Update autumndb from 19.0.3 to 19.1.0'"
+  date: 2022-03-22T18:23:39.299Z
+- commits:
     - subject: Update internal-patch
       hash: ef414e95781e0a23ffdcb02e248fb5fe198efb9e
       body: ""
