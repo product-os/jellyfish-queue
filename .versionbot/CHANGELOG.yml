@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add deprecation notice
+      hash: b0a48237dcc0d82f490aba872c4267e0d1424e78
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Josh Bowling <josh@balena.io>
+        signed-off-by: Josh Bowling <josh@balena.io>
+      author: Josh Bowling
+      nested: []
+  version: 4.1.31
+  title: "'Add deprecation notice'"
+  date: 2022-03-25T07:29:35.341Z
+- commits:
     - subject: Update internal-patch
       hash: c4e69a1ca78a3a64f5685062b009c791636c740f
       body: ""
