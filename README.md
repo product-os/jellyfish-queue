@@ -1,10 +1,12 @@
+**Notice: This utility has been discontinued. The functionality provided by this module has been merged into [`jellyfish-worker`](https://github.com/product-os/jellyfish-worker).**
+
 # Jellyfish Queue
 
 The Jellyfish system processes incoming action requests and adds them to a queue so that they can be retrieved and executed in order.
 
 This module provides a small set of functions to perform any queue-related operations, and should be utilized by any module requiring interaction with queued objects.
 
-Note that, although `jellyfish-queue` is mostly used for enqueuing action requests, it could also be used to support handling other types of objects as well. 
+Note that, although `jellyfish-queue` is mostly used for enqueuing action requests, it could also be used to support handling other types of objects as well.
 
 Under-the-hood, this module makes use of [`graphile-worker`](https://github.com/graphile/worker), a persistent job queue that supports PostgreSQL and can be used to run jobs "in the background" so that application code is not held up.
 ## Goals
